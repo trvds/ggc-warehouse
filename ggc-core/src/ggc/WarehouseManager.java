@@ -22,8 +22,22 @@ public class WarehouseManager {
    * @@throws FileNotFoundException
    * @@throws MissingFileAssociationException
    */
+  public String getFilename() {
+    return _filename;
+  }
+
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
     //FIXME implement serialization method
+    if (_filename.equals("")) {
+      System.out.println("FILENAME EMPTY");
+      throw new MissingFileAssociationException();
+    }
+
+    ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
+    out.writeObject(_warehouse);
+    out.close();
+
+
   }
 
   /**
