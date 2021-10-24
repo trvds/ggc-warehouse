@@ -1,5 +1,5 @@
-PO_UILIB_DIR=../../po-uilib
-PO_GGC_CORE_DIR=../../ggc-core
+PO_UILIB_DIR=/usr/lib/po-uilib
+PO_GGC_CORE_DIR=../ggc-core
 JARNAME=ggc-app
 
 all:
