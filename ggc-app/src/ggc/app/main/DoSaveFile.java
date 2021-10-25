@@ -4,7 +4,6 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
 import java.io.IOException;
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import ggc.WarehouseManager;
@@ -20,7 +19,7 @@ class DoSaveFile extends Command<WarehouseManager> {
   DoSaveFile(WarehouseManager receiver) {
     super(Label.SAVE, receiver);
     if (receiver.getFilename() == "") {
-      addStringField("filename", Prompt.newSaveAs());
+      addStringField("save_filename", Prompt.newSaveAs());
     }
     //FIXME maybe add command fields
   }
@@ -29,9 +28,9 @@ class DoSaveFile extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     //FIXME implement command
     try {
-      String _filename = stringField("filename");
+      String _filename = stringField("save_filename");
       if (_receiver.getFilename() == "") {
-        _filename = stringField("filename");
+        _filename = stringField("save_filename");
         _receiver.saveAs(_filename);
       }
       else {

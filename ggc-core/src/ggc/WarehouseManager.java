@@ -33,9 +33,9 @@ public class WarehouseManager {
       throw new MissingFileAssociationException();
     }
 
-    ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
-    out.writeObject(_warehouse);
-    out.close();
+    ObjectOutputStream ous = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
+    ous.writeObject(_warehouse);
+    ous.close();
 
 
   }
@@ -55,8 +55,10 @@ public class WarehouseManager {
    * @@param filename
    * @@throws UnavailableFileException
    */
-  public void load(String filename) throws UnavailableFileException {
-    //FIXME implement serialization method
+  public void load(String filename) throws UnavailableFileException, FileNotFoundException, IOException, ClassNotFoundException {
+    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(_filename)));
+    _warehouse = (Warehouse) ois.readObject();
+    ois.close();
   }
 
   /**
