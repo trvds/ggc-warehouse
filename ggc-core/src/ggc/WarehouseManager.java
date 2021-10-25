@@ -17,6 +17,10 @@ public class WarehouseManager {
   //FIXME define constructor(s)
   //FIXME define other methods
 
+  public String getFilename() {
+    return _filename;
+  }
+
   /**
    * @@throws IOException
    * @@throws FileNotFoundException
@@ -25,7 +29,6 @@ public class WarehouseManager {
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
     //FIXME implement serialization method
     if (_filename.equals("")) {
-      System.out.println("FILENAME EMPTY");
       throw new MissingFileAssociationException();
     }
 
