@@ -16,7 +16,7 @@ class DoShowAvailableBatches extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    _receiver.getAllBatches();
+    _display.popup(_receiver.getAllBatches());
   }
-
+  
 }

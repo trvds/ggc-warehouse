@@ -80,6 +80,10 @@ public class WarehouseManager {
     return _warehouse.showDate();
   }
 
+  public double getBalance(){
+    return _warehouse.getBalance();
+  }
+
   public void registerPartner(String id, String name, String adress) throws PartnerDuplicateKeyException{
     _warehouse.registerPartner(id, name, adress);
   }

@@ -3,7 +3,6 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.WarehouseManager;
-//FIXME import classes
 
 /**
  * Show all products.
@@ -16,7 +15,7 @@ class DoShowAllProducts extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    _receiver.getAllProducts();
+    _display.popup(_receiver.getAllProducts());
   }
 
 }

@@ -5,6 +5,5 @@ package ggc.app.products;
  */
 interface Message {
 
-  // EMPTY
-
+  
 }

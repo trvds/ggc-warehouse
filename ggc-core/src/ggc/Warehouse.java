@@ -23,9 +23,9 @@ public class Warehouse implements Serializable {
   private int _transactionCounter = 0;
   
   // Maps estão a ser usados como placeholders para outras estruturas
-  private Map<String,Partner> _partners = new TreeMap<String,Partner>();
-  private Map<String, Product> _products = new TreeMap<String, Product>();
-  private Map<String, ArrayList<Batches>> _batches = new TreeMap<String, ArrayList<Batches>>();
+  private Map<String,Partner> _partners = new TreeMap<String,Partner>(String.CASE_INSENSITIVE_ORDER);
+  private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
+  private Map<String, ArrayList<Batches>> _batches = new TreeMap<String, ArrayList<Batches>>(String.CASE_INSENSITIVE_ORDER);
 
 
   // FIXME define contructor(s)
@@ -52,6 +52,10 @@ public class Warehouse implements Serializable {
 
   public int showDate(){
     return this._date;
+  }
+
+  public double getBalance(){
+    return _balance;
   }
 
   public void registerPartner(String id, String name, String adress) throws PartnerDuplicateKeyException{
