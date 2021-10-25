@@ -3,8 +3,11 @@ package ggc;
 
 import ggc.exceptions.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Collections;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -22,7 +25,7 @@ public class Warehouse implements Serializable {
   // Maps estão a ser usados como placeholders para outras estruturas
   private Map<String,Partner> _partners = new TreeMap<String,Partner>();
   private Map<String, Product> _products = new TreeMap<String, Product>();
-  private Map<String, Product> _batches = new TreeMap<String, Product>();
+  private Map<String, ArrayList<Batches>> _batches = new TreeMap<String, ArrayList<Batches>>();
 
 
   // FIXME define contructor(s)
@@ -77,13 +80,33 @@ public class Warehouse implements Serializable {
 
   public String getPartners(){
       String returnString = "";
-      for(Map.Entry<String,Partner> entry : _partners.entrySet())
-      {
+      for(Map.Entry<String,Partner> entry : _partners.entrySet()){
         returnString += entry.getValue().toString();
         returnString += "\n";
       }
 
       return returnString;
+  }
+
+  public String getAllProducts(){
+    String returnString = "";
+    for(Map.Entry<String,Product> entry : _products.entrySet()){
+      returnString += entry.getValue().toString();
+      returnString += "\n";
+    }
+    return returnString;
+  }
+
+  public String getAllBatches(){
+    String returnString = "";
+    for(Map.Entry<String,ArrayList<Batches>> entry : _batches.entrySet()){
+      ArrayList<Batches> batchesArray = entry.getValue();
+      Collections.sort(batchesArray);
+      for(Batches batch: batchesArray){
+        returnString += batch.toString();
+      }
+    }
+    return returnString;
   }
 
 } 

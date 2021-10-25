@@ -25,8 +25,12 @@ public class Partner implements Serializable{
         _totalSold = 0;
     }
 
+    public String getPartnerId(){
+        return _id;
+    }
+
     public String toString(){
-        return _id + "|" + _name + "|" + _status.getStatus() + "|" + _points + "|" + _totalBought + "|" + _totalSold + "|" + _totalPaid;
+        return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + _totalBought + "|" + _totalSold + "|" + _totalPaid;
     }
 
     public ArrayList<String> getNotifications(){

@@ -22,10 +22,6 @@ public class WarehouseManager {
    * @@throws FileNotFoundException
    * @@throws MissingFileAssociationException
    */
-  public String getFilename() {
-    return _filename;
-  }
-
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
     //FIXME implement serialization method
     if (_filename.equals("")) {
@@ -91,6 +87,14 @@ public class WarehouseManager {
 
   public String getPartners(){
     return _warehouse.getPartners();
+  }
+
+  public String getAllProducts(){
+    return _warehouse.getAllProducts();
+  }
+
+  public String getAllBatches(){
+    return _warehouse.getAllBatches();
   }
 
 }
