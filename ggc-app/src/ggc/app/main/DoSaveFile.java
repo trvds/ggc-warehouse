@@ -28,9 +28,8 @@ class DoSaveFile extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     //FIXME implement command
     try {
-      String _filename = stringField("save_filename");
       if (_receiver.getFilename() == "") {
-        _filename = stringField("save_filename");
+        String _filename = stringField("save_filename");
         _receiver.saveAs(_filename);
       }
       else {

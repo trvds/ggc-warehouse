@@ -55,7 +55,7 @@ public class WarehouseManager {
    * @@throws UnavailableFileException
    */
   public void load(String filename) throws UnavailableFileException, FileNotFoundException, IOException, ClassNotFoundException {
-    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(_filename)));
+    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)));
     _warehouse = (Warehouse) ois.readObject();
     ois.close();
   }
