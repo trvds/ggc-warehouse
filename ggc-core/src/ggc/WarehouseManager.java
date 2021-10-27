@@ -17,10 +17,6 @@ public class WarehouseManager {
   //FIXME define constructor(s)
   //FIXME define other methods
 
-  public String getFilename() {
-    return _filename;
-  }
-
   /**
    * @@throws IOException
    * @@throws FileNotFoundException

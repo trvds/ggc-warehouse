@@ -2,12 +2,11 @@ package ggc.app.main;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-
+import pt.tecnico.uilib.forms.Form;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-
 import ggc.WarehouseManager;
-//FIXME import classes
+import ggc.app.exceptions.FileOpenFailedException;
 import ggc.exceptions.MissingFileAssociationException;
 
 /**
@@ -18,43 +17,34 @@ class DoSaveFile extends Command<WarehouseManager> {
   /** @param receiver */
   DoSaveFile(WarehouseManager receiver) {
     super(Label.SAVE, receiver);
-    if (receiver.getFilename() == "") {
-      addStringField("save_filename", Prompt.newSaveAs());
-    }
     //FIXME maybe add command fields
   }
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
     try {
-      if (_receiver.getFilename() == "") {
-        String _filename = stringField("save_filename");
-        _receiver.saveAs(_filename);
-      }
-      else {
       _receiver.save();
+    }
+    catch (MissingFileAssociationException e) {
+      String save_filename = Form.requestString(Prompt.newSaveAs());
+      try {
+        _receiver.saveAs(save_filename);
+      }
+      catch (MissingFileAssociationException mfae) {
+        mfae.printStackTrace();
+      }
+      catch (FileNotFoundException fnfe) {
+        fnfe.printStackTrace();
+      }
+      catch (IOException ioe) {
+        ioe.printStackTrace();
       }
     }
-    catch (MissingFileAssociationException e){
-      //FIXME
-      e.printStackTrace();
-
+    catch (FileNotFoundException e) {
+      throw new FileOpenFailedException(e.getMessage());
     }
-    catch (FileNotFoundException e){
-      e.printStackTrace();
-      //FIXME
+    catch (IOException e) {
+      throw new FileOpenFailedException(e.getMessage());
     }
-    catch (IOException e){
-      e.printStackTrace();
-      //FIXME
-    }
-
-
-
-    }
-
-
-
-
+  }
 }
