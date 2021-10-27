@@ -1,6 +1,7 @@
 package ggc;
 
 import java.io.Serializable;
+import java.lang.Math;
 
 public class Batches implements Serializable, Comparable<Batches>{
     private Product _product;
@@ -33,7 +34,7 @@ public class Batches implements Serializable, Comparable<Batches>{
 
     @Override
     public String toString(){
-        return _product.getProductId() + "|" + _partner.getPartnerId() + "|" + _price + "|" + _quantity;
+        return _product.getProductId() + "|" + _partner.getPartnerId() + "|" + Math.round(_price) + "|" + _quantity + "\n";
     }
 
     @Override

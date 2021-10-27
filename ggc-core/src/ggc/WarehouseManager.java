@@ -54,6 +54,8 @@ public class WarehouseManager {
     ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)));
     _warehouse = (Warehouse) ois.readObject();
     ois.close();
+    _filename = filename;
+
   }
 
   /**
@@ -63,7 +65,7 @@ public class WarehouseManager {
   public void importFile(String textfile) throws ImportFileException {
     try {
 	    _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException /* FIXME maybe other exceptions */ e) {
+    } catch (IOException | BadEntryException | PartnerUnknownKeyException e) {
 	    throw new ImportFileException(textfile);
     }
   }
