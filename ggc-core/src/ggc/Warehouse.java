@@ -41,7 +41,27 @@ public class Warehouse implements Serializable {
    * @throws BadEntryException
    */
   void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
-    //FIXME implement method
+    try (BufferedReader in = new BufferedReader(new FileReader(txtfile))) {
+      String buffer;
+      while ((buffer = in.readLine()) != null) {
+        String line = new String (buffer.getBytes(), "UTF-8");
+        if (line.charAt(0) == '#') { //Commented import lines
+          continue;
+        }
+        String[] fields = line.split("\\|");
+        //TODO removeSystem.out.println(fields[0]);
+        switch (fields[0]) {
+          case "PARTNER" -> registerPartner(fields[1], fields[2], fields[3]);// PARTNER|id|nome|endereço
+          case "BATCH_S" -> System.out.println("BATCH_S created");// BATCH_S|idProduto|idParceiro|preço|stock-actual
+          case "BATCH_M" -> System.out.println("BATCH_M created");// BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
+          default -> throw new BadEntryException(fields[0]);
+        }
+      }
+    }
+    catch (PartnerDuplicateKeyException e) {
+      e.printStackTrace();
+    }
+
   }
 
   public void advanceDate(int days) throws NoSuchDateException{
