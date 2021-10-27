@@ -145,7 +145,7 @@ public void registerComposedBatches(String[] fields) throws PartnerUnknownKeyExc
   }
 
   public void advanceDate(int days) throws NoSuchDateException{
-    if (days < 0)
+    if (days <= 0)
       throw new NoSuchDateException(days);
     this._date += days;
   }
