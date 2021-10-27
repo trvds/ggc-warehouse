@@ -2,6 +2,7 @@ package ggc;
 
 import java.io.Serializable;
 import java.lang.Math;
+import java.text.Collator;
 
 public class Batches implements Serializable, Comparable<Batches>{
     private Product _product;
@@ -39,6 +40,7 @@ public class Batches implements Serializable, Comparable<Batches>{
 
     @Override
     public int compareTo(Batches comparedBatch){
+        Collator myCollator = Collator.getInstance();
         String comparedProduct = comparedBatch.getProduct().getProductId();
         String comparedPartner = comparedBatch.getPartner().getPartnerId();
         float comparedPrice = comparedBatch.getPrice();
@@ -51,8 +53,8 @@ public class Batches implements Serializable, Comparable<Batches>{
                 }
                 return Float.compare(_price, comparedPrice);
             }
-            return _partner.getPartnerId().compareTo(comparedPartner);
+            return myCollator.compare(_partner.getPartnerId(), comparedPartner);
         }
-        return _product.getProductId().compareTo(comparedProduct);
+        return myCollator.compare(_product.getProductId(), comparedProduct);
     }
 }
