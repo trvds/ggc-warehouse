@@ -1,6 +1,4 @@
 package ggc;
-// FIXME import classes (cannot import from pt.tecnico or ggc.app)
-
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -16,20 +14,26 @@ public class Warehouse implements Serializable {
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202109192006L;
+
+  /** Date of the warehouse */
   private int _date = 0;
+  /** Balance of the warehouse */
   private double _balance = 0;
+  /** Number of transactions that have happened in the warehouse */
   private int _transactionCounter = 0;
 
-  /** Agregations of the Classes */
+  /** Partners of the warehouse */
   private Map<String,Partner> _partners = new TreeMap<String,Partner>(String.CASE_INSENSITIVE_ORDER);
+  /** Products in the warehouse */
   private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
+  /** Batches of products in the warehouse */
   private ArrayList<Batches> _batches = new ArrayList<Batches>();
 
-  // FIXME define contructor(s)
+  /**
+   *  Constructor
+   */
   public Warehouse(){
   }
-
-  // FIXME define methods
 
   /**
    * @param txtfile filename to be loaded.
@@ -223,7 +227,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public ArrayList<RecipeComponent> defineRecipe(String recipeDescription){ //throws ProductUnknownKey{
+  public ArrayList<RecipeComponent> defineRecipe(String recipeDescription){ //throws ProductUnknownKeyException{
     ArrayList<RecipeComponent> recipe = new ArrayList<RecipeComponent>();
     String[] components = recipeDescription.split("#");
 
