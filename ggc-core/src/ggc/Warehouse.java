@@ -223,15 +223,15 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public ArrayList<RecipeComponent> defineRecipe(String recipeDescription) throws ProductUnknownKey{
+  public ArrayList<RecipeComponent> defineRecipe(String recipeDescription){ //throws ProductUnknownKey{
     ArrayList<RecipeComponent> recipe = new ArrayList<RecipeComponent>();
     String[] components = recipeDescription.split("#");
 
     for(String component: components){
       String[] fields = component.split(":");
       Product product = _products.get(fields[0]);
-      if (product == null)
-        throw new ProductUnknownKey(fields[0]);
+      //if (product == null)
+      //  throw new ProductUnknownKey(fields[0]);
       int quantity = Integer.parseInt(fields[1]);
       RecipeComponent recipeComponent = new RecipeComponent(product, quantity);
       recipe.add(recipeComponent);

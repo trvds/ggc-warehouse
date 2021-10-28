@@ -1,7 +1,7 @@
 package ggc.exceptions;
 
 /** Exception for Partner key related problems. */
-public class ProductUnknownKey extends Exception {
+public class ProductUnknownKeyException extends Exception {
     
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202109091821L;
@@ -10,7 +10,7 @@ public class ProductUnknownKey extends Exception {
   private final String _id;
 
   /** @param id unknown key to report. */
-  public ProductUnknownKey(String id) {
+  public ProductUnknownKeyException(String id) {
     _id = id;
    }
 
