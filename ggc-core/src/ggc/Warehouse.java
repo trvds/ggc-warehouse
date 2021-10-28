@@ -16,7 +16,6 @@ public class Warehouse implements Serializable {
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202109192006L;
-  /
   private int _date = 0;
   private double _balance = 0;
   private int _transactionCounter = 0;
