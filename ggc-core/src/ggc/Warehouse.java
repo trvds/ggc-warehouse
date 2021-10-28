@@ -51,77 +51,26 @@ public class Warehouse implements Serializable {
         String[] fields = line.split("\\|");
         switch (fields[0]) {
           case "PARTNER" -> registerPartner(fields[1], fields[2], fields[3]);// PARTNER|id|nome|endereço
-          case "BATCH_S" -> registerSimpleBatches(fields); // BATCH_S|idProduto|idParceiro|preço|stock-actual
-          case "BATCH_M" -> registerComposedBatches(fields); // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-          default -> throw new BadEntryException(fields[0]);
+          
+          case "BATCH_S" -> registerBatches(fields[1],
+                                            fields[2], 
+                                            Float.valueOf(fields[3]), 
+                                            Integer.valueOf(fields[4])); // BATCH_S|idProduto|idParceiro|preço|stock-actual
+         
+          case "BATCH_M" -> registerBatches(fields[1], 
+                                            fields[2], 
+                                            Float.valueOf(fields[3]), 
+                                            Integer.valueOf(fields[4]), 
+                                            Float.valueOf(fields[5]), 
+                                            defineRecipe(fields[6])); // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
+
+           default -> throw new BadEntryException(fields[0]);
         }
       }
     }
     catch (PartnerDuplicateKeyException e) {
       e.printStackTrace();
     }
-
-  }
-  
-  //public void registerSimpleBatch(String productId, String partnerId, float price, int quantity) throws PartnerUnknownKeyException{
-  public void registerComposedBatches(String[] fields) throws PartnerUnknownKeyException {
-    // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-    String productId = fields[1];
-    String partnerId = fields[2];
-    float price = Float.valueOf(fields[3]);
-    int quantity = Integer.valueOf(fields[4]);
-    float alpha = Float.valueOf(fields[5]);
-    ArrayList<RecipeComponent> recipe = defineRecipe(fields[6]);
-
-    Product product = _products.get(productId);
-    Partner partner = _partners.get(partnerId);
-    if(partner == null)
-      throw new PartnerUnknownKeyException(partnerId);
-    if(product == null){
-      product = new DerivedProduct(productId, recipe, alpha);
-      product.setTotalStock(quantity);
-      product.setMaxPrice(price);
-      _products.put(productId, product);
-    }
-    else
-    {
-      if (product.getMaxPrice() < price){
-        product.setMaxPrice(price);
-      }
-      product.setTotalStock(product.getTotalStock() + quantity);
-    }
-
-    Batches batch = new Batches(product, partner, quantity, price);
-    _batches.add(batch);
-
-  }
-
-  public void registerSimpleBatches(String[] fields) throws PartnerUnknownKeyException {
-    String productId = fields[1];
-    String partnerId = fields[2];
-    float price = Float.valueOf(fields[3]);
-    int quantity = Integer.valueOf(fields[4]);
-
-    Product product = _products.get(productId);
-    Partner partner = _partners.get(partnerId);
-    if(partner == null)
-      throw new PartnerUnknownKeyException(partnerId);
-    if(product == null){
-      product = new Product(productId);
-      product.setTotalStock(quantity);
-      product.setMaxPrice(price);
-      _products.put(productId, product);
-    }
-    else
-    {
-      if(product.getMaxPrice() < price){
-        product.setMaxPrice(price);
-      }
-      product.setTotalStock(product.getTotalStock() + quantity);
-    }
-    
-    Batches batch = new Batches(product, partner, quantity, price);
-    _batches.add(batch);
   }
 
   /**
@@ -225,6 +174,71 @@ public class Warehouse implements Serializable {
       returnString += batch.toString();
     }
     return returnString;
+  }
+
+  /**
+   * Function to register a Batch in the warehouse
+   * @param productId id of the product of the batch
+   * @param partnerId id of the partner of the batch
+   * @param price price of the batch
+   * @param quantity quantity of stock of the batch
+   * @param alpha aggravation tax on the recipe of the product
+   * @param recipe recipe of the product
+   * @throws PartnerUnknownKeyException
+   */
+  public void registerBatches(String productId, String partnerId, float price, int quantity, float alpha, ArrayList<RecipeComponent> recipe) throws PartnerUnknownKeyException {
+    Product product = _products.get(productId);
+    Partner partner = _partners.get(partnerId);
+    if(partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+    if(product == null){
+      product = new DerivedProduct(productId, recipe, alpha);
+      product.setTotalStock(quantity);
+      product.setMaxPrice(price);
+      _products.put(productId, product);
+    }
+    else
+    {
+      if (product.getMaxPrice() < price){
+        product.setMaxPrice(price);
+      }
+      product.setTotalStock(product.getTotalStock() + quantity);
+    }
+    Batches batch = new Batches(product, partner, quantity, price);
+    _batches.add(batch);
+  }
+
+  /**
+   * Function to register a Batch in the warehouse
+   * @param productId id of the product of the batch
+   * @param partnerId id of the partner of the batch
+   * @param price price of the batch
+   * @param quantity quantity of stock of the batch
+   * @param alpha aggravation tax on the recipe of the product
+   * @param recipe recipe of the product
+   * @throws PartnerUnknownKeyException
+   */
+  public void registerBatches(String productId, String partnerId, float price, int quantity) throws PartnerUnknownKeyException {
+    Product product = _products.get(productId);
+    Partner partner = _partners.get(partnerId);
+    if(partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+    if(product == null){
+      product = new Product(productId);
+      product.setTotalStock(quantity);
+      product.setMaxPrice(price);
+      _products.put(productId, product);
+    }
+    else
+    {
+      if(product.getMaxPrice() < price){
+        product.setMaxPrice(price);
+      }
+      product.setTotalStock(product.getTotalStock() + quantity);
+    }
+    
+    Batches batch = new Batches(product, partner, quantity, price);
+    _batches.add(batch);
   }
 
   public ArrayList<RecipeComponent> defineRecipe(String recipeDescription){ //throws ProductUnknownKeyException{
