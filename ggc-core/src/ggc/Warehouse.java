@@ -241,6 +241,11 @@ public class Warehouse implements Serializable {
     _batches.add(batch);
   }
 
+  /**
+   * Function to translate a string describing a recipe of a product into a array of RecipeComponents
+   * @param recipeDescription string with the description of the recipe
+   * @return array of RecipeComponents of the recipe
+   */
   public ArrayList<RecipeComponent> defineRecipe(String recipeDescription){ //throws ProductUnknownKeyException{
     ArrayList<RecipeComponent> recipe = new ArrayList<RecipeComponent>();
     String[] components = recipeDescription.split("#");
