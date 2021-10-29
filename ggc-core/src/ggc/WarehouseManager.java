@@ -9,8 +9,6 @@ public class WarehouseManager {
 
   /** Name of file storing current store. */
   private String _filename = "";
-  /** State flag to ensure Serialization idempotency.*/
-  private boolean _pendingWrite = false;
   /** The warehouse itself. */
   private Warehouse _warehouse = new Warehouse();
 
@@ -28,12 +26,10 @@ public class WarehouseManager {
     if (_filename.equals("")) {
       throw new MissingFileAssociationException();
     }
-    if (_pendingWrite == true) {
-      ObjectOutputStream ous = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
-      ous.writeObject(_warehouse);
-      ous.close();
-      _pendingWrite = false;
-    }
+    ObjectOutputStream ous = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
+    ous.writeObject(_warehouse);
+    ous.close();
+
   }
 
   /**
@@ -72,7 +68,6 @@ public class WarehouseManager {
   }
 
   public void advanceDate(int days) throws NoSuchDateException{
-    _pendingWrite = true;
     _warehouse.advanceDate(days);
   }
 
@@ -85,7 +80,6 @@ public class WarehouseManager {
   }
 
   public void registerPartner(String id, String name, String adress) throws PartnerDuplicateKeyException{
-    _pendingWrite = true;
     _warehouse.registerPartner(id, name, adress);
   }
 
