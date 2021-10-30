@@ -19,7 +19,7 @@ public class Partner implements Serializable{
         _name = name;
         _adress = adress;
         _points = 0;
-        _status = new NormalStatus();
+        _status = new NormalStatus(this, 0);
         _totalBought = 0;
         _totalPaid = 0;
         _totalSold = 0;
@@ -44,4 +44,11 @@ public class Partner implements Serializable{
         this._notifications = new ArrayList<String>();
     }
 
+    public void setStatus(Status status){
+        _status = status;
+    }
+
+    public void updateStatus(){
+        _status.updateStatus();
+    }
 }
