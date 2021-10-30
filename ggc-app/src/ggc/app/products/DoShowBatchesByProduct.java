@@ -3,7 +3,8 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.WarehouseManager;
-//FIXME import classes
+import ggc.exceptions.ProductUnknownKeyException;
+import ggc.app.exceptions.UnknownProductKeyException;
 
 /**
  * Show all products.
@@ -12,12 +13,17 @@ class DoShowBatchesByProduct extends Command<WarehouseManager> {
 
   DoShowBatchesByProduct(WarehouseManager receiver) {
     super(Label.SHOW_BATCHES_BY_PRODUCT, receiver);
-    //FIXME maybe add command fields
+    addStringField("id", Prompt.productKey());
   }
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
+    try{
+      String id = stringField("id");
+      _display.popup(_receiver.getBatchesByProduct(id));
+    } catch(ProductUnknownKeyException e) {
+      throw new UnknownProductKeyException(e.getId());
+    }
   }
 
 }

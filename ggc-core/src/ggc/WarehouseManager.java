@@ -99,4 +99,12 @@ public class WarehouseManager {
     return _warehouse.getAllBatches();
   }
 
+  public String getBatchesByProduct(String id) throws ProductUnknownKeyException{
+    return _warehouse.getBatchesByProduct(id);
+  }
+  
+  public String getBatchesByPartner(String id) throws PartnerUnknownKeyException{
+    return _warehouse.getBatchesByPartner(id);
+  }
+
 }

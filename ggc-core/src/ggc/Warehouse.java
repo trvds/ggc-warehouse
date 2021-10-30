@@ -261,4 +261,45 @@ public class Warehouse implements Serializable {
     }
     return recipe;
   }
+
+  /**
+   * Function to get the batches of a given partner
+   * @param partnerId
+   * @return String of batches by partner
+   */
+  public String getBatchesByPartner(String partnerId) throws PartnerUnknownKeyException{
+    Partner partner = _partners.get(partnerId);
+    if (partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+    Collections.sort(_batches);
+    String returnString = "";
+    Collections.sort(_batches);
+    for(Batches batch: _batches){
+      if (batch.getPartner() == partner)
+        returnString += batch.toString();
+    }
+    return returnString;
+  }
+
+  /**
+   * Function to get the batches of a given product
+   * @param productId
+   * @return String of batches by product
+   */
+  public String getBatchesByProduct(String productId) throws ProductUnknownKeyException{
+    Product product = _products.get(productId);
+    if (product == null)
+      throw new ProductUnknownKeyException(productId);
+    Collections.sort(_batches);
+    String returnString = "";
+    Collections.sort(_batches);
+    for(Batches batch: _batches){
+      if (batch.getProduct() == product)
+        returnString += batch.toString(); 
+        // como o array está ordenado, assim que detetar o primeiro elemento sem o produto igual podemos parar
+        // implementa-se mais tarde se tivermos problemas de eficiencia
+    }
+    return returnString;
+  }
+
 }
