@@ -19,4 +19,12 @@ public abstract class Transaction implements Serializable {
         _price = price;
     }
 
+    public int getPaymentDate(){
+        return _paymentDate;
+    }
+
+    @Override
+    public String toString(){
+        return  _id + "|" + _partnerId + "|" + _productId + "|" + _quantity + "|" + _price;
+    }
 }

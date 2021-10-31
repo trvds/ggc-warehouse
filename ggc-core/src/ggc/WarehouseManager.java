@@ -107,4 +107,8 @@ public class WarehouseManager {
     return _warehouse.getBatchesByPartner(id);
   }
 
+  public String getTransaction(int id) throws TransactionUnknownKeyException{
+    return _warehouse.getTransaction(id);
+  }
+
 }

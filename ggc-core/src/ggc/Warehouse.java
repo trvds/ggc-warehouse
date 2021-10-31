@@ -28,6 +28,8 @@ public class Warehouse implements Serializable {
   private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
   /** Batches of products in the warehouse */
   private ArrayList<Batches> _batches = new ArrayList<Batches>();
+  /** Transaction List of the warehouse */
+  private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
   /**
    *  Constructor
@@ -301,5 +303,14 @@ public class Warehouse implements Serializable {
     }
     return returnString;
   }
+
+  public String getTransaction(int id) throws TransactionUnknownKeyException{
+    Transaction transaction = _transactions.get(id);
+    if (transaction == null){
+      throw new TransactionUnknownKeyException(id);
+    }
+    return transaction.toString();
+  }
+
 
 }
