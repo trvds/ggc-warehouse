@@ -29,7 +29,6 @@ class DoOpenFile extends Command<WarehouseManager> {
 
     try {
       String _filename = stringField("open_filename");
-      System.out.println(_filename);
       _receiver.load(_filename);
     }
     catch (UnavailableFileException ufe) {

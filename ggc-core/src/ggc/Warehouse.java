@@ -1,4 +1,5 @@
 package ggc;
+import ggc.app.exceptions.UnknownPartnerKeyException;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -302,6 +303,18 @@ public class Warehouse implements Serializable {
         // implementa-se mais tarde se tivermos problemas de eficiencia
     }
     return returnString;
+  }
+
+  public void registerBuyTransaction(String partnerId, String productId, float price, int quantity)  {
+      Partner partner = _partners.get(partnerId);
+      Product product = _products.get(productId);
+
+      if (partner == null) {
+        //TODO esperar pelos testes da final
+      }
+      if (product == null) {
+        product = new Product(productId);
+      }
   }
 
   public String getTransaction(int id) throws TransactionUnknownKeyException{
