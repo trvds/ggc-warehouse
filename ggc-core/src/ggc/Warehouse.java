@@ -5,8 +5,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Collections;
+import java.util.TreeSet;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -28,7 +30,7 @@ public class Warehouse implements Serializable {
   /** Products in the warehouse */
   private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
   /** Batches of products in the warehouse */
-  private ArrayList<Batches> _batches = new ArrayList<Batches>();
+  private Map<String, TreeSet<Batches>> _batches = new TreeMap<String, TreeSet<Batches>>(); //FIXME Mudar para Map<String, Set<Batches>>
   /** Transaction List of the warehouse */
   private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
@@ -172,9 +174,12 @@ public class Warehouse implements Serializable {
    */
   public String getAllBatches(){
     String returnString = "";
-    Collections.sort(_batches);
-    for(Batches batch: _batches){
-      returnString += batch.toString();
+    
+    for(Map.Entry<String, TreeSet<Batches>> entry : _batches.entrySet()){
+      TreeSet<Batches> productSet = entry.getValue();
+      for(Batches batch: productSet){
+        returnString += batch.toString();
+      }
     }
     return returnString;
   }
@@ -207,8 +212,16 @@ public class Warehouse implements Serializable {
       }
       product.setTotalStock(product.getTotalStock() + quantity);
     }
+        
+    TreeSet<Batches> productSet = _batches.get(productId);
+    
+    if (productSet == null)
+      productSet = new TreeSet<Batches>();
     Batches batch = new Batches(product, partner, quantity, price);
-    _batches.add(batch);
+
+    productSet.add(batch);
+    _batches.put(productId, productSet);
+
   }
 
   /**
@@ -241,7 +254,14 @@ public class Warehouse implements Serializable {
     }
     
     Batches batch = new Batches(product, partner, quantity, price);
-    _batches.add(batch);
+    
+    TreeSet<Batches> productSet = _batches.get(productId);
+    
+    if (productSet == null)
+      productSet = new TreeSet<Batches>();
+    
+    productSet.add(batch);
+    _batches.put(productId, productSet);
   }
 
   /**
@@ -274,12 +294,14 @@ public class Warehouse implements Serializable {
     Partner partner = _partners.get(partnerId);
     if (partner == null)
       throw new PartnerUnknownKeyException(partnerId);
-    Collections.sort(_batches);
     String returnString = "";
-    Collections.sort(_batches);
-    for(Batches batch: _batches){
-      if (batch.getPartner() == partner)
-        returnString += batch.toString();
+    
+    for(Map.Entry<String, TreeSet<Batches>> entry : _batches.entrySet()){
+      TreeSet<Batches> productSet = entry.getValue();
+      for(Batches batch: productSet){
+        if (batch.getPartner() == partner)
+          returnString += batch.toString();
+      }
     }
     return returnString;
   }
@@ -293,14 +315,12 @@ public class Warehouse implements Serializable {
     Product product = _products.get(productId);
     if (product == null)
       throw new ProductUnknownKeyException(productId);
-    Collections.sort(_batches);
     String returnString = "";
-    Collections.sort(_batches);
-    for(Batches batch: _batches){
-      if (batch.getProduct() == product)
-        returnString += batch.toString(); 
-        // como o array está ordenado, assim que detetar o primeiro elemento sem o produto igual podemos parar
-        // implementa-se mais tarde se tivermos problemas de eficiencia
+    
+    TreeSet<Batches> productSet = _batches.get(productId);
+    
+    for(Batches batch: productSet){
+      returnString += batch.toString();
     }
     return returnString;
   }
