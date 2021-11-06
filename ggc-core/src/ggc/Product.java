@@ -5,7 +5,7 @@ import java.lang.Math;
 public class Product implements Serializable{
     private String _id;
     private int _totalStock;
-    private float _maxPrice;
+    private double _maxPrice;
 
     public Product(String id){
         _id = id;
@@ -23,11 +23,11 @@ public class Product implements Serializable{
         _totalStock = totalStock;
     }
 
-    public void setMaxPrice(float maxPrice){
+    public void setMaxPrice(double maxPrice){
         _maxPrice = maxPrice;
     }
 
-    public float getMaxPrice() {
+    public double getMaxPrice() {
         return _maxPrice;
     }
 
