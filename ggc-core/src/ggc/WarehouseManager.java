@@ -111,4 +111,16 @@ public class WarehouseManager {
     return _warehouse.getTransaction(id);
   }
 
+  
+  public void registerSaleTransaction(String partnerId, double price, int amount)
+  /*TODO 
+  Para registar uma venda, é pedido o identificador do parceiro, a data limite para o pagamento 
+  (Prompt.paymentDeadline()), o identificador do produto a vender e a respectiva quantidade
+   (Prompt.amount()). Se a quantidade for superior às existências actuais, deve ser lançada a excepção 
+   UnavailableProductException (não se realiza a venda).
+    */
+  {
+    
+  }
+
 }

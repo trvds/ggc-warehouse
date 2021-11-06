@@ -59,14 +59,14 @@ public class Warehouse implements Serializable {
           
           case "BATCH_S" -> registerBatches(fields[1],
                                             fields[2], 
-                                            Float.valueOf(fields[3]), 
+                                            Double.valueOf(fields[3]), 
                                             Integer.valueOf(fields[4])); // BATCH_S|idProduto|idParceiro|preço|stock-actual
          
           case "BATCH_M" -> registerBatches(fields[1], 
                                             fields[2], 
-                                            Float.valueOf(fields[3]), 
-                                            Integer.valueOf(fields[4]), 
-                                            Float.valueOf(fields[5]), 
+                                            Double.valueOf(fields[3]),
+                                            Integer.valueOf(fields[4]),
+                                            Double.valueOf(fields[5]),
                                             defineRecipe(fields[6])); // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
 
            default -> throw new BadEntryException(fields[0]);
@@ -194,7 +194,7 @@ public class Warehouse implements Serializable {
    * @param recipe recipe of the product
    * @throws PartnerUnknownKeyException
    */
-  public void registerBatches(String productId, String partnerId, float price, int quantity, float alpha, ArrayList<RecipeComponent> recipe) throws PartnerUnknownKeyException {
+  public void registerBatches(String productId, String partnerId, double price, int quantity, double alpha, ArrayList<RecipeComponent> recipe) throws PartnerUnknownKeyException {
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
     if(partner == null)
@@ -234,7 +234,7 @@ public class Warehouse implements Serializable {
    * @param recipe recipe of the product
    * @throws PartnerUnknownKeyException
    */
-  public void registerBatches(String productId, String partnerId, float price, int quantity) throws PartnerUnknownKeyException {
+  public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
     if(partner == null)
@@ -325,7 +325,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public void registerBuyTransaction(String partnerId, String productId, float price, int quantity)  {
+  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity)  {
       Partner partner = _partners.get(partnerId);
       Product product = _products.get(productId);
 

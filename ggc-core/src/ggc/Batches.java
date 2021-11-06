@@ -8,9 +8,9 @@ public class Batches implements Serializable, Comparable<Batches>{
     private Product _product;
     private Partner _partner;
     private int _quantity;
-    private final float _price;
+    private final double _price;
     
-    public Batches(Product product, Partner partner, int quantity, float price){
+    public Batches(Product product, Partner partner, int quantity, double price){
         _product = product;
         _partner = partner;
         _quantity = quantity;
@@ -29,7 +29,7 @@ public class Batches implements Serializable, Comparable<Batches>{
         return _quantity;
     }
 
-    public float getPrice(){
+    public double getPrice(){
         return _price;
     }
 
@@ -43,7 +43,7 @@ public class Batches implements Serializable, Comparable<Batches>{
         Collator myCollator = Collator.getInstance();
         String comparedProduct = comparedBatch.getProduct().getProductId();
         String comparedPartner = comparedBatch.getPartner().getPartnerId();
-        float comparedPrice = comparedBatch.getPrice();
+        double comparedPrice = comparedBatch.getPrice();
         int comparedQuantity = comparedBatch.getQuantity();
 
         if (comparedProduct == _product.getProductId()){
@@ -51,7 +51,7 @@ public class Batches implements Serializable, Comparable<Batches>{
                 if (comparedPrice == _price){
                     return _quantity - comparedQuantity;
                 }
-                return Float.compare(_price, comparedPrice);
+                return Double.compare(_price, comparedPrice);
             }
             return myCollator.compare(_partner.getPartnerId(), comparedPartner);
         }
