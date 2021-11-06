@@ -2,8 +2,8 @@ package ggc;
 
 public class SellTransaction extends Transaction{
     private int _paymentDeadline;
-    private float _paymentPrice;
-    private boolean _payed = false;
+    private double _paymentPrice;
+    private boolean _paid = false;
 
     public SellTransaction(int id, int date, String productId, String partnerId, int quantity, float price, int paymentDeadline) {
         super(id, date, productId, partnerId, quantity, price);

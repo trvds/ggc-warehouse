@@ -120,11 +120,12 @@ public class WarehouseManager {
     return _warehouse.getProduct(productId);
   }
 
-  public void registerProduct(String productId, int totalStock, float maxPrice){
+  public void registerProduct(String productId, int totalStock, double maxPrice){
     _warehouse.registerProduct(productId, totalStock, maxPrice);
   }
 
-  public void registerProduct(String productId, int totalStock, float maxPrice, float alpha, ArrayList<RecipeComponent> recipe){
+  public void registerProduct(String productId, int totalStock, double maxPrice, double alpha, ArrayList<RecipeComponent> recipe){
     _warehouse.registerProduct(productId, totalStock, maxPrice, alpha, recipe);
   }
+
 }

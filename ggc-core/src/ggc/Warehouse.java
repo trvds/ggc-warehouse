@@ -1,5 +1,4 @@
 package ggc;
-import ggc.app.exceptions.UnknownPartnerKeyException;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -57,13 +56,14 @@ public class Warehouse implements Serializable {
         switch (fields[0]) {
           case "PARTNER" -> registerPartner(fields[1], fields[2], fields[3]); // PARTNER|id|nome|endereço
           case "BATCH_S" -> {
-                              registerProduct(fields[1], Integer.valueOf(fields[4]), Float.valueOf(fields[3]));
-                              registerBatches(fields[1], fields[2], Float.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                              registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]));
+                              registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
                             } // BATCH_S|idProduto|idParceiro|preço|stock-actual
           case "BATCH_M" -> {
-                              registerProduct(fields[1], Integer.valueOf(fields[4]), Float.valueOf(fields[3]), Float.valueOf(fields[5]), defineRecipe(fields[6]));
-                              registerBatches(fields[1], fields[2], Float.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                              registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]), Double.valueOf(fields[5]), defineRecipe(fields[6]));
+                              registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
                             } // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
+
            default -> throw new BadEntryException(fields[0]);
         }
       }
@@ -189,7 +189,8 @@ public class Warehouse implements Serializable {
    * @param recipe recipe of the product
    * @throws PartnerUnknownKeyException
    */
-  public void registerBatches(String productId, String partnerId, float price, int quantity) throws PartnerUnknownKeyException {
+  public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
+
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
     
@@ -207,11 +208,12 @@ public class Warehouse implements Serializable {
 
   }
 
-  public void registerProduct(String productId, int totalStock, float maxPrice){
+  public void registerProduct(String productId, int totalStock, double maxPrice){
     if (_products.get(productId) == null){
       Product product = new Product(productId);
       product.setTotalStock(totalStock);
       product.setMaxPrice(maxPrice);
+
       _products.put(productId, product);
     }
     else{
@@ -298,11 +300,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public Product getProduct(String productId){
-    return _products.get(productId);
-  }
-
-  public void registerBuyTransaction(String partnerId, String productId, float price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
       Partner partner = _partners.get(partnerId);
       Product product = _products.get(productId);
 
@@ -318,6 +316,11 @@ public class Warehouse implements Serializable {
       _transactions.put(_transactionCounter, transaction);
       registerBatches(productId, partnerId, price, quantity);
   }
+
+  public void registerSaleTransaction(String partnerId, double price, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+    //TODO everything
+  }
+
 
   public String getTransaction(int id) throws TransactionUnknownKeyException{
     Transaction transaction = _transactions.get(id);

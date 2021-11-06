@@ -12,12 +12,25 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
 
   public DoRegisterSaleTransaction(WarehouseManager receiver) {
     super(Label.REGISTER_SALE_TRANSACTION, receiver);
-    //FIXME maybe add command fields 
+    addStringField("partnerId", Prompt.partnerKey());
+    addIntegerField("paymentDeadline", Prompt.paymentDeadline());
+    addIntegerField("transactionAmount", Prompt.amount());
   }
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
+    /*TODO
+    Para registar uma venda, é pedido o identificador do parceiro,
+     a data limite para o pagamento (Prompt.paymentDeadline()), o identificador do produto a vender 
+     e a respectiva quantidade (Prompt.amount()). Se a quantidade for superior às existências actuais,
+      deve ser lançada a excepção UnavailableProductException (não se realiza a venda).
+
+ */
+    String partnerId = stringField("partnerId");
+    int paymentDeadline = integerField("paymentDeadline");
+    int amount = integerField("transactionAmount");
+    _receiver.registerSaleTransaction(partnerId, paymentDeadline, amount);
+
   }
 
 }
