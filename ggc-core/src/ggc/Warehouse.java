@@ -100,6 +100,10 @@ public class Warehouse implements Serializable {
     return _balance;
   }
 
+  public Product getProduct(String productId) {
+    return _products.get(productId);
+  }
+
   /**
    * Function to register a Partner in the warehouse
    * @param id - id of the Partner

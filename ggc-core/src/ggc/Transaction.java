@@ -10,7 +10,7 @@ public abstract class Transaction implements Serializable {
     private int _quantity;
     private double _price;
 
-    public Transaction(int id, int paymentDate, String productId, String partnerId, int quantity, double price){
+    public Transaction(int id, int date, String productId, String partnerId, int quantity, double price){
         _id = id;
         _date = date;
         _productId = productId;

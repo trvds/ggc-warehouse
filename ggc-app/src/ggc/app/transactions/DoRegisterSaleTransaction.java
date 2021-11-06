@@ -29,7 +29,7 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
     String partnerId = stringField("partnerId");
     int paymentDeadline = integerField("paymentDeadline");
     int amount = integerField("transactionAmount");
-    _receiver.registerSaleTransaction(partnerId, paymentDeadline, amount);
+   // _receiver.registerSaleTransaction(partnerId, paymentDeadline, amount);
 
   }
 
