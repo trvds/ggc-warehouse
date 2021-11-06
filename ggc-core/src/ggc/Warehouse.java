@@ -29,7 +29,7 @@ public class Warehouse implements Serializable {
   /** Products in the warehouse */
   private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
   /** Batches of products in the warehouse */
-  private Map<String, TreeSet<Batches>> _batches = new TreeMap<String, TreeSet<Batches>>(); //FIXME Mudar para Map<String, Set<Batches>>
+  private Map<String, TreeSet<Batches>> _batches = new TreeMap<String, TreeSet<Batches>>();
   /** Transaction List of the warehouse */
   private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
@@ -54,19 +54,15 @@ public class Warehouse implements Serializable {
         }
         String[] fields = line.split("\\|");
         switch (fields[0]) {
-          case "PARTNER" -> registerPartner(fields[1], fields[2], fields[3]);// PARTNER|id|nome|endereço
-          
-          case "BATCH_S" -> registerBatches(fields[1],
-                                            fields[2], 
-                                            Double.valueOf(fields[3]), 
-                                            Integer.valueOf(fields[4])); // BATCH_S|idProduto|idParceiro|preço|stock-actual
-         
-          case "BATCH_M" -> registerBatches(fields[1], 
-                                            fields[2], 
-                                            Double.valueOf(fields[3]),
-                                            Integer.valueOf(fields[4]),
-                                            Double.valueOf(fields[5]),
-                                            defineRecipe(fields[6])); // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
+          case "PARTNER" -> registerPartner(fields[1], fields[2], fields[3]); // PARTNER|id|nome|endereço
+          case "BATCH_S" -> {
+                              registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]));
+                              registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                            } // BATCH_S|idProduto|idParceiro|preço|stock-actual
+          case "BATCH_M" -> {
+                              registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]), Double.valueOf(fields[5]), defineRecipe(fields[6]));
+                              registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                            } // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
 
            default -> throw new BadEntryException(fields[0]);
         }
@@ -193,24 +189,13 @@ public class Warehouse implements Serializable {
    * @param recipe recipe of the product
    * @throws PartnerUnknownKeyException
    */
-  public void registerBatches(String productId, String partnerId, double price, int quantity, double alpha, ArrayList<RecipeComponent> recipe) throws PartnerUnknownKeyException {
+  public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
+
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
+    
     if(partner == null)
       throw new PartnerUnknownKeyException(partnerId);
-    if(product == null){
-      product = new DerivedProduct(productId, recipe, alpha);
-      product.setTotalStock(quantity);
-      product.setMaxPrice(price);
-      _products.put(productId, product);
-    }
-    else
-    {
-      if (product.getMaxPrice() < price){
-        product.setMaxPrice(price);
-      }
-      product.setTotalStock(product.getTotalStock() + quantity);
-    }
         
     TreeSet<Batches> productSet = _batches.get(productId);
     
@@ -223,44 +208,35 @@ public class Warehouse implements Serializable {
 
   }
 
-  /**
-   * Function to register a Batch in the warehouse
-   * @param productId id of the product of the batch
-   * @param partnerId id of the partner of the batch
-   * @param price price of the batch
-   * @param quantity quantity of stock of the batch
-   * @param alpha aggravation tax on the recipe of the product
-   * @param recipe recipe of the product
-   * @throws PartnerUnknownKeyException
-   */
-  public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
-    Product product = _products.get(productId);
-    Partner partner = _partners.get(partnerId);
-    if(partner == null)
-      throw new PartnerUnknownKeyException(partnerId);
-    if(product == null){
-      product = new Product(productId);
-      product.setTotalStock(quantity);
-      product.setMaxPrice(price);
+  public void registerProduct(String productId, int totalStock, double maxPrice){
+    if (_products.get(productId) == null){
+      Product product = new Product(productId);
+      product.setTotalStock(totalStock);
+      product.setMaxPrice(maxPrice);
+
       _products.put(productId, product);
     }
-    else
-    {
-      if(product.getMaxPrice() < price){
-        product.setMaxPrice(price);
-      }
-      product.setTotalStock(product.getTotalStock() + quantity);
+    else{
+      Product product = _products.get(productId);
+      if (product.getMaxPrice() < maxPrice)
+        product.setMaxPrice(maxPrice);
+      product.setTotalStock(product.getTotalStock() + totalStock);
     }
-    
-    Batches batch = new Batches(product, partner, quantity, price);
-    
-    TreeSet<Batches> productSet = _batches.get(productId);
-    
-    if (productSet == null)
-      productSet = new TreeSet<Batches>();
-    
-    productSet.add(batch);
-    _batches.put(productId, productSet);
+  }
+
+  public void registerProduct(String productId, int totalStock, float maxPrice, float alpha, ArrayList<RecipeComponent> recipe){
+    if (_products.get(productId) == null){
+      DerivedProduct product = new DerivedProduct(productId, recipe, alpha);
+      product.setTotalStock(totalStock);
+      product.setMaxPrice(maxPrice);
+      _products.put(productId, product);
+    }
+    else{
+      Product product = _products.get(productId);
+      if (product.getMaxPrice() < maxPrice)
+        product.setMaxPrice(maxPrice);
+      product.setTotalStock(product.getTotalStock() + totalStock);
+    }
   }
 
   /**
@@ -324,16 +300,21 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity)  {
+  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
       Partner partner = _partners.get(partnerId);
       Product product = _products.get(productId);
 
       if (partner == null) {
-        //TODO esperar pelos testes da final
+        throw new PartnerUnknownKeyException(partnerId);
       }
       if (product == null) {
-        product = new Product(productId);
+        throw new ProductUnknownKeyException(productId);
       }
+
+      Transaction transaction = new BuyTransaction(_transactionCounter, _date, productId, partnerId, quantity, price);
+      _transactionCounter += 1;
+      _transactions.put(_transactionCounter, transaction);
+      registerBatches(productId, partnerId, price, quantity);
   }
 
   public void registerSaleTransaction(String partnerId, double price, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException{
@@ -349,5 +330,23 @@ public class Warehouse implements Serializable {
     return transaction.toString();
   }
 
+  public void registerSellTransaction(String partnerId, int paymentDeadline, String productId, int quantity)  {
+    Partner partner = _partners.get(partnerId);
+    Product product = _products.get(productId);
+
+    if (partner == null) {
+      //TODO lançar exceção
+    }
+    if (product == null) {
+      //TODO lançar exceção
+    }
+
+    if (product.getTotalStock() > quantity) {
+      // Lançar exceção UnavailableProductException
+    }
+
+
+
+}
 
 }

@@ -1,17 +1,19 @@
 package ggc;
 
 public class SellTransaction extends Transaction{
-    private int _dateDeadline;
+    private int _paymentDeadline;
     private double _paymentPrice;
     private boolean _paid = false;
 
-    public SellTransaction(int id, int paymentDate, String productId, String partnerId, int quantity, int price){
-        super(id, paymentDate, productId, partnerId, quantity, price);
+    public SellTransaction(int id, int date, String productId, String partnerId, int quantity, float price, int paymentDeadline) {
+        super(id, date, productId, partnerId, quantity, price);
+        _paymentDeadline = paymentDeadline;
+        _paymentPrice = price;
     }
 
     @Override
     public String toString(){
-        return "VENDA|" + super.toString() + "|" + _paymentPrice + "|" + _dateDeadline + "|" + getPaymentDate();
+        return "VENDA|" + super.toString() + "|" + _paymentPrice + "|" + _paymentDeadline + "|" + getPaymentDate();
     }
 
 }

@@ -3,7 +3,8 @@ package ggc;
 
 import ggc.exceptions.*;
 import java.io.*;
-
+import ggc.RecipeComponent;
+import java.util.ArrayList;
 /** Façade for access. */
 public class WarehouseManager {
 
@@ -111,9 +112,20 @@ public class WarehouseManager {
     return _warehouse.getTransaction(id);
   }
 
-  
-  public void registerSaleTransaction(String partnerId, double price, int amount){
-    _warehouse.registerSaleTransaction(partnerId, price, amount);
+  public void registerBuyTransaction(String partnerId, String productId, float price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+    _warehouse.registerBuyTransaction(partnerId, productId, price, quantity);
+  }
+
+  public Product getProduct(String productId){
+    return _warehouse.getProduct(productId);
+  }
+
+  public void registerProduct(String productId, int totalStock, double maxPrice){
+    _warehouse.registerProduct(productId, totalStock, maxPrice);
+  }
+
+  public void registerProduct(String productId, int totalStock, double maxPrice, double alpha, ArrayList<RecipeComponent> recipe){
+    _warehouse.registerProduct(productId, totalStock, maxPrice, alpha, recipe);
   }
 
 }
