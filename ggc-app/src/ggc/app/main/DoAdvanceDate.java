@@ -5,7 +5,6 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exceptions.InvalidDateException;
 import ggc.exceptions.NoSuchDateException;
 
-import java.lang.reflect.Field;
 import ggc.WarehouseManager;
 
 /**
