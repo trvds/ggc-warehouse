@@ -1,5 +1,4 @@
 package ggc;
-import ggc.app.exceptions.UnknownPartnerKeyException;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -336,6 +335,11 @@ public class Warehouse implements Serializable {
         product = new Product(productId);
       }
   }
+
+  public void registerSaleTransaction(String partnerId, double price, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+    //TODO everything
+  }
+
 
   public String getTransaction(int id) throws TransactionUnknownKeyException{
     Transaction transaction = _transactions.get(id);

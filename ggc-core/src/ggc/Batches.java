@@ -51,10 +51,15 @@ public class Batches implements Serializable, Comparable<Batches>{
                 if (comparedPrice == _price){
                     return _quantity - comparedQuantity;
                 }
-                return Double.compare(_price, comparedPrice);
+                return Float.compare(_price, comparedPrice);
             }
             return myCollator.compare(_partner.getPartnerId(), comparedPartner);
         }
         return myCollator.compare(_product.getProductId(), comparedProduct);
     }
+    
+    /*TODO https://web.tecnico.ulisboa.pt/~david.matos/w/pt/index.php/Classes_Internas_(Java)/Exerc%C3%ADcio_01:_Interfaces_java.lang.Comparable_e_java.util.Comparator
+    */
 }
+
+
