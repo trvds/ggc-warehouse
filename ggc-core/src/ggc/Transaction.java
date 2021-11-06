@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public abstract class Transaction implements Serializable {
     private int _id;
-    private int _paymentDate;
+    private int _date;
     private String _productId;
     private String _partnerId;
     private int _quantity;
     private float _price;
 
-    public Transaction(int id, int paymentDate, String productId, String partnerId, int quantity, int price){
+    public Transaction(int id, int date, String productId, String partnerId, int quantity, float price){
         _id = id;
-        _paymentDate = paymentDate;
+        _date = date;
         _productId = productId;
         _partnerId = partnerId;
         _quantity = quantity;
@@ -20,7 +20,7 @@ public abstract class Transaction implements Serializable {
     }
 
     public int getPaymentDate(){
-        return _paymentDate;
+        return _date;
     }
 
     @Override
