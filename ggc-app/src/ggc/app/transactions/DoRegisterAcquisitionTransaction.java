@@ -28,7 +28,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
   public final void execute() throws CommandException {
     String partnerId = stringField("partnerId");
     String productId = stringField("productId");
-    float price = realField("price").floatValue(); //REMOVE floatValue();
+    double price = realField("price");
     int quantity = integerField("quantity");
 
     ArrayList<RecipeComponent> recipe = new ArrayList<RecipeComponent>();
@@ -51,7 +51,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         recipe.add(new RecipeComponent(productrecipe, productquantity));
       }
 
-      float alpha = Form.requestReal(Prompt.alpha()).floatValue(); // REMOVE floatValue()
+      double alpha = Form.requestReal(Prompt.alpha())
       _receiver.registerProduct(productId, quantity, price, alpha, recipe);
     }
     else

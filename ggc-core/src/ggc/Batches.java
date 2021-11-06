@@ -51,7 +51,7 @@ public class Batches implements Serializable, Comparable<Batches>{
                 if (comparedPrice == _price){
                     return _quantity - comparedQuantity;
                 }
-                return Float.compare(_price, comparedPrice);
+                return Double.compare(_price, comparedPrice);
             }
             return myCollator.compare(_partner.getPartnerId(), comparedPartner);
         }

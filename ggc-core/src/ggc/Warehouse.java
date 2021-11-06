@@ -224,7 +224,7 @@ public class Warehouse implements Serializable {
     }
   }
 
-  public void registerProduct(String productId, int totalStock, float maxPrice, float alpha, ArrayList<RecipeComponent> recipe){
+  public void registerProduct(String productId, int totalStock, double maxPrice, double alpha, ArrayList<RecipeComponent> recipe){
     if (_products.get(productId) == null){
       DerivedProduct product = new DerivedProduct(productId, recipe, alpha);
       product.setTotalStock(totalStock);

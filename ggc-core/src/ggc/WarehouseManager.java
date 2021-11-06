@@ -112,7 +112,7 @@ public class WarehouseManager {
     return _warehouse.getTransaction(id);
   }
 
-  public void registerBuyTransaction(String partnerId, String productId, float price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
     _warehouse.registerBuyTransaction(partnerId, productId, price, quantity);
   }
 
