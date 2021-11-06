@@ -51,7 +51,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         recipe.add(new RecipeComponent(productrecipe, productquantity));
       }
 
-      double alpha = Form.requestReal(Prompt.alpha())
+      double alpha = Form.requestReal(Prompt.alpha());
       _receiver.registerProduct(productId, quantity, price, alpha, recipe);
     }
     else
