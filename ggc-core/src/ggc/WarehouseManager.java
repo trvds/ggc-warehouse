@@ -128,4 +128,7 @@ public class WarehouseManager {
     _warehouse.registerProduct(productId, totalStock, maxPrice, alpha, recipe);
   }
 
+  public void toggleNotifications(String productId, String partnerId){
+    _warehouse.toggleNotifications(productId, partnerId);
+  }
 }

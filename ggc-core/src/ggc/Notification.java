@@ -3,9 +3,9 @@ import java.io.Serializable;
 
 public abstract class Notification implements Serializable{
     private String _productId;
-    private int _productPrice;
+    private double _productPrice;
 
-    public Notification(String productId, int productPrice){
+    public Notification(String productId, double productPrice){
         _productId = productId;
         _productPrice = productPrice;
     }

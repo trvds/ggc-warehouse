@@ -5,8 +5,8 @@ public class DerivedProduct extends Product{
     private ArrayList<RecipeComponent> _recipe;
     private double _alpha;
 
-    public DerivedProduct(String name, ArrayList<RecipeComponent> recipe, double alpha){
-        super(name);
+    public DerivedProduct(String name, double maxPrice, int totalStock, ArrayList<RecipeComponent> recipe, double alpha){
+        super(name, maxPrice, totalStock);
         _recipe = recipe;
         _alpha = alpha;
     }

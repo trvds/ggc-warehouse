@@ -2,7 +2,7 @@ package ggc;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Partner implements Serializable{
+public class Partner implements Serializable, ProductObserver{
     private String _id;
     private String _name;
     private String _adress;
@@ -11,7 +11,8 @@ public class Partner implements Serializable{
     private int _totalBought;
     private int _totalSold;
     private int _totalPaid;
-    private ArrayList<String> _notifications = new ArrayList<String>();
+    private ArrayList<Notification> _notifications = new ArrayList<Notification>();
+    private DeliveryMode _deliveryMode = new DefaultDeliveryMode();
 
 
     public Partner(String id, String name, String adress){
@@ -29,19 +30,28 @@ public class Partner implements Serializable{
         return _id;
     }
 
+    @Override
+    public void update(String productId, double price, String event) {
+        _notifications.add(_deliveryMode.deliverNotification(productId, price, event));
+    }
+
+    @Override
     public String toString(){
         return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + _totalBought + "|" + _totalSold + "|" + _totalPaid;
     }
 
     public ArrayList<String> getNotifications(){
-        ArrayList<String> notifications = this._notifications;
+        ArrayList<String> returnList = new ArrayList<String>();
+        for(Notification notification: _notifications){
+            returnList.add(notification.toString());
+        }
         wipeNotifications();
-        return notifications;
+        return returnList;
     }
 
     public void wipeNotifications()
     {
-        this._notifications = new ArrayList<String>();
+        this._notifications = new ArrayList<Notification>();
     }
 
     public void setStatus(Status status){

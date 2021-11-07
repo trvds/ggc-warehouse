@@ -213,11 +213,12 @@ public class Warehouse implements Serializable {
   }
 
   public void registerProduct(String productId, int totalStock, double maxPrice){
-    if (_products.get(productId) == null){
-      Product product = new Product(productId);
-      product.setTotalStock(totalStock);
-      product.setMaxPrice(maxPrice);
-
+    if (_products.get(productId) == null){      
+      Product product = new Product(productId, maxPrice, totalStock);
+      for(Map.Entry<String,Partner> entry : _partners.entrySet()){
+        product.registerObserver(entry.getValue());   
+      }
+      product.notify(maxPrice, "NEW");
       _products.put(productId, product);
     }
     else{
@@ -230,9 +231,11 @@ public class Warehouse implements Serializable {
 
   public void registerProduct(String productId, int totalStock, double maxPrice, double alpha, ArrayList<RecipeComponent> recipe){
     if (_products.get(productId) == null){
-      DerivedProduct product = new DerivedProduct(productId, recipe, alpha);
-      product.setTotalStock(totalStock);
-      product.setMaxPrice(maxPrice);
+      DerivedProduct product = new DerivedProduct(productId, maxPrice, totalStock, recipe, alpha);
+      for(Map.Entry<String,Partner> entry : _partners.entrySet()){
+        product.registerObserver(entry.getValue());   
+      }
+      product.notify(maxPrice, "NEW");
       _products.put(productId, product);
     }
     else{
@@ -348,9 +351,12 @@ public class Warehouse implements Serializable {
     if (product.getTotalStock() > quantity) {
       // Lançar exceção UnavailableProductException
     }
+  }
 
+  public void toggleNotifications(String productId, String partnerId){
+    Product product = _products.get(productId);
+    Partner partner = _partners.get(partnerId);
 
-
-}
-
+    product.toggleNotifications(partner);
+  }
 }

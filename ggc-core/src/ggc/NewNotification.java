@@ -2,7 +2,7 @@ package ggc;
 
 public class NewNotification extends Notification{
 
-    public NewNotification(String productId, int productPrice){
+    public NewNotification(String productId, double productPrice){
         super(productId, productPrice);
     }
 
