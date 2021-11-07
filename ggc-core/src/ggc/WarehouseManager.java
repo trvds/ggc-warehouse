@@ -128,7 +128,11 @@ public class WarehouseManager {
     _warehouse.registerProduct(productId, totalStock, maxPrice, alpha, recipe);
   }
 
-  public void toggleNotifications(String productId, String partnerId){
+  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException{
     _warehouse.toggleNotifications(productId, partnerId);
+  }
+
+  public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
+    return _warehouse.getPartnerBuyTransactions(partnerId);
   }
 }

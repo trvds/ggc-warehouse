@@ -11,9 +11,13 @@ public class BreakdownTransaction extends Transaction{
         _recipe = recipe; 
     }
 
+    public String transactionType(){
+        return "DESAGREGAÇÃO";
+    }
+
     @Override
     public String toString(){
-        return "DESAGREGAÇÃO|" + super.toString() + "|" + _paymentPrice + "|" + _dateDeadline + "|" + getPaymentDate() + "|" + _recipe;
+        return transactionType() + "|" + super.toString() + "|" + _paymentPrice + "|" + _dateDeadline + "|" + getPaymentDate() + "|" + _recipe;
     }
 
 }

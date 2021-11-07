@@ -321,6 +321,7 @@ public class Warehouse implements Serializable {
       Transaction transaction = new BuyTransaction(_transactionCounter, _date, productId, partnerId, quantity, price);
       _transactionCounter += 1;
       _transactions.put(_transactionCounter, transaction);
+      partner.registerTransaction(transaction);
       registerBatches(productId, partnerId, price, quantity);
   }
 
@@ -353,10 +354,25 @@ public class Warehouse implements Serializable {
     }
   }
 
-  public void toggleNotifications(String productId, String partnerId){
+  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException{
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
-
+    if (partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+      
     product.toggleNotifications(partner);
+  }
+
+  public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
+    Partner partner = _partners.get(partnerId);
+    
+    if (partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+
+    String returnString = "";
+    for(Transaction transaction: partner.getBuyTransactions()){
+      returnString += transaction.toString() + "\n";
+    }
+    return returnString;
   }
 }

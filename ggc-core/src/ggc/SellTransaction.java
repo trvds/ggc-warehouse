@@ -11,9 +11,13 @@ public class SellTransaction extends Transaction{
         _paymentPrice = price;
     }
 
+    public String transactionType(){
+        return "VENDA";
+    }
+
     @Override
     public String toString(){
-        return "VENDA|" + super.toString() + "|" + _paymentPrice + "|" + _paymentDeadline + "|" + getPaymentDate();
+        return transactionType() + "|" + super.toString() + "|" + _paymentPrice + "|" + _paymentDeadline + "|" + getPaymentDate();
     }
 
 }

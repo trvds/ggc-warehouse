@@ -1,6 +1,8 @@
 package ggc;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Partner implements Serializable, ProductObserver{
     private String _id;
@@ -13,6 +15,7 @@ public class Partner implements Serializable, ProductObserver{
     private int _totalPaid;
     private ArrayList<Notification> _notifications = new ArrayList<Notification>();
     private DeliveryMode _deliveryMode = new DefaultDeliveryMode();
+    private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
 
     public Partner(String id, String name, String adress){
@@ -60,5 +63,25 @@ public class Partner implements Serializable, ProductObserver{
 
     public void updateStatus(){
         _status.updateStatus();
+    }
+
+    public void registerTransaction(Transaction transaction){
+        _transactions.put(transaction.getId(), transaction);
+    }
+
+    public Transaction getTransaction(int id){
+        return _transactions.get(id);
+    }
+
+    public ArrayList<Transaction> getBuyTransactions(){
+        ArrayList<Transaction> returnList = new ArrayList<Transaction>();
+        
+        for(Map.Entry<Integer,Transaction> entry : _transactions.entrySet()){
+            Transaction transaction = entry.getValue();
+            if (transaction.transactionType() == "COMPRA")
+                returnList.add(transaction);   
+        }
+
+        return returnList;
     }
 }
