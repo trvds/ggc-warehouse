@@ -1,4 +1,5 @@
 package ggc;
+import ggc.app.exceptions.UnavailableProductException;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -232,7 +233,7 @@ public class Warehouse implements Serializable {
       product.notify(maxPrice, "NEW");
       _products.put(productId, product);
     }
-    else{
+    else {
       Product product = _products.get(productId);
       if (product.getMaxPrice() < maxPrice)
         product.setMaxPrice(maxPrice);
@@ -354,9 +355,60 @@ public class Warehouse implements Serializable {
       partner.registerTransaction(transaction);
       registerBatches(productId, partnerId, price, quantity);
   }
-
-  public void registerSaleTransaction(String partnerId, double price, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+ 
+  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, UnavailableProductException {
     //TODO everything
+    Partner partner = _partners.get(partnerId);
+    Product product = _products.get(productId);
+    if (partner == null) {
+      throw new PartnerUnknownKeyException(partnerId);
+    }
+    if (product == null) {
+      throw new ProductUnknownKeyException(productId);
+    }
+
+    TreeSet<Batches> productBatches = _batches.get(productId);
+    Set<Batches> orderedByPrice = new TreeSet<Batches>(Batches.PRICE_COMPARATOR);
+    orderedByPrice.addAll(productBatches);
+    
+    //Check if there's enough before modifying batches
+    int haveAmount = 0;
+    boolean enoughQuantity = false;
+    for(Batches b1: orderedByPrice) {
+
+      if (b1.getQuantity() >= amount-haveAmount) {
+        enoughQuantity = true;
+        break;
+      }
+      else {
+        haveAmount += b1.getQuantity();
+      }
+    }
+    if (enoughQuantity == false) {
+      throw new UnavailableProductException(productId, amount, haveAmount);
+    }
+    //-----------------
+    haveAmount = 0;
+    double totalPrice = 0;
+    for (Batches b2: orderedByPrice) {
+      if (b2.getQuantity() > amount-haveAmount) {
+        b2.withdraw(amount-haveAmount);
+        totalPrice += b2.getPrice() / amount-haveAmount;
+        productBatches.add(b2); //Add batch with updated quantity
+      }
+      else if (b2.getQuantity() <= amount-haveAmount) {
+        haveAmount += b2.getQuantity();
+        totalPrice += b2.getPrice();
+        productBatches.remove(b2);
+      }
+      if (amount-haveAmount == 0) {
+        break;
+      }
+    }
+    _batches.put(productId, productBatches);
+    SellTransaction newSaleTransaction = new SellTransaction(++_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
+    _transactions.put(_transactionCounter, newSaleTransaction);
+
   }
 
 

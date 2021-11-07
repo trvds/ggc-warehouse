@@ -4,6 +4,8 @@ package ggc;
 import ggc.exceptions.*;
 import java.io.*;
 import ggc.RecipeComponent;
+import ggc.app.exceptions.UnavailableProductException;
+
 import java.util.ArrayList;
 /** Façade for access. */
 public class WarehouseManager {
@@ -186,6 +188,11 @@ public class WarehouseManager {
    * @param productId
    * @return Product
    */
+  //partnerId, productId, paymentDeadline, amount);
+  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, UnavailableProductException{
+    _warehouse.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);
+  }
+
   public Product getProduct(String productId){
     return _warehouse.getProduct(productId);
   }
