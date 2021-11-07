@@ -100,6 +100,12 @@ public class Warehouse implements Serializable {
     return _balance;
   }
 
+  
+  /** 
+   * Product getter from the warehouse
+   * @param productId - id of the product
+   * @return product - returns the wanted product
+   */
   public Product getProduct(String productId) {
     return _products.get(productId);
   }
@@ -189,8 +195,6 @@ public class Warehouse implements Serializable {
    * @param partnerId id of the partner of the batch
    * @param price price of the batch
    * @param quantity quantity of stock of the batch
-   * @param alpha aggravation tax on the recipe of the product
-   * @param recipe recipe of the product
    * @throws PartnerUnknownKeyException
    */
   public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
@@ -212,6 +216,13 @@ public class Warehouse implements Serializable {
 
   }
 
+  
+  /** 
+   * Function to register a product in the warehouse
+   * @param productId - id of the product
+   * @param totalStock - quantity of the product that is available
+   * @param maxPrice - price of the product
+   */
   public void registerProduct(String productId, int totalStock, double maxPrice){
     if (_products.get(productId) == null){      
       Product product = new Product(productId, maxPrice, totalStock);
@@ -229,6 +240,15 @@ public class Warehouse implements Serializable {
     }
   }
 
+  
+  /** 
+   * Function to register a derived product in the warehouse
+   * @param productId - id of the product
+   * @param totalStock - quantity of the product that is available
+   * @param maxPrice - price of the product
+   * @param alpha - agravation rate of the derived product
+   * @param recipe - recipe of the derived product
+   */
   public void registerProduct(String productId, int totalStock, double maxPrice, double alpha, ArrayList<RecipeComponent> recipe){
     if (_products.get(productId) == null){
       DerivedProduct product = new DerivedProduct(productId, maxPrice, totalStock, recipe, alpha);
@@ -307,6 +327,16 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+  
+  /** 
+   * Function that registers a buy transaction in the warehouse
+   * @param partnerId - id of the partner
+   * @param productId - id of the product
+   * @param price - price of the batch
+   * @param quantity - quantity of the batch
+   * @throws PartnerUnknownKeyException
+   * @throws ProductUnknownKeyException
+   */
   public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
       Partner partner = _partners.get(partnerId);
       Product product = _products.get(productId);
@@ -330,6 +360,13 @@ public class Warehouse implements Serializable {
   }
 
 
+  
+  /** 
+   * Transaction getter from the warehouse
+   * @param id - id of the transaction
+   * @return String
+   * @throws TransactionUnknownKeyException
+   */
   public String getTransaction(int id) throws TransactionUnknownKeyException{
     Transaction transaction = _transactions.get(id);
     if (transaction == null){
@@ -338,6 +375,7 @@ public class Warehouse implements Serializable {
     return transaction.toString();
   }
 
+  
   public void registerSellTransaction(String partnerId, int paymentDeadline, String productId, int quantity)  {
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
@@ -354,6 +392,13 @@ public class Warehouse implements Serializable {
     }
   }
 
+  
+  /** 
+   * Function to toggle the notifications of a partner
+   * @param productId - id of the product whose notifications we want to toggle
+   * @param partnerId - id of the partner
+   * @throws PartnerUnknownKeyException
+   */
   public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException{
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
@@ -363,6 +408,13 @@ public class Warehouse implements Serializable {
     product.toggleNotifications(partner);
   }
 
+  
+  /**
+   * Function to get the Buy Transactions of a partner 
+   * @param partnerId - id of the partner
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
   public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
     Partner partner = _partners.get(partnerId);
     

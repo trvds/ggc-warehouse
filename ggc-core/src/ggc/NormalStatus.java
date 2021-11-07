@@ -16,8 +16,16 @@ public class NormalStatus extends Status{
         getPartner().setStatus(new SelectionStatus(getPartner(), getPoints()));
     }
 
+    
+    /** 
+     * @param getStatus(
+     */
     public void demoteStatus(){ }
     
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getStatus(){
         return "NORMAL";

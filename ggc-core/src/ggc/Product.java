@@ -15,26 +15,50 @@ public class Product implements Serializable, ObservableProduct{
         _maxPrice = maxPrice;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getProductId(){
         return _id;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getTotalStock() {
         return _totalStock;
     }
 
+    
+    /** 
+     * @param totalStock
+     */
     public void setTotalStock(int totalStock){
         _totalStock = totalStock;
     }
 
+    
+    /** 
+     * @param maxPrice
+     */
     public void setMaxPrice(double maxPrice){
         _maxPrice = maxPrice;
     }
 
+    
+    /** 
+     * @return double
+     */
     public double getMaxPrice() {
         return _maxPrice;
     }
 
+    
+    /** 
+     * @param observer
+     */
     public void toggleNotifications(ProductObserver observer){
         if (_observers.get(observer) == true)
             removeObserver(observer);
@@ -42,16 +66,29 @@ public class Product implements Serializable, ObservableProduct{
             registerObserver(observer);
     }
 
+    
+    /** 
+     * @param observer
+     */
     @Override
     public void registerObserver(ProductObserver observer){
         _observers.put(observer, true);
     }
 
+    
+    /** 
+     * @param observer
+     */
     @Override
     public void removeObserver(ProductObserver observer){
         _observers.put(observer, false);
     }
 
+    
+    /** 
+     * @param price
+     * @param event
+     */
     @Override
     public void notify(double price, String event){
         for (HashMap.Entry<ProductObserver, Boolean> observer : _observers.entrySet()) {
@@ -60,6 +97,10 @@ public class Product implements Serializable, ObservableProduct{
         }
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return _id + "|" + Math.round(_maxPrice) + "|" + _totalStock;

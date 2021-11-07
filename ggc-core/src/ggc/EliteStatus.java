@@ -12,12 +12,20 @@ public class EliteStatus extends Status{
         }
     }
 
+    
+    /** 
+     * @param demoteStatus(
+     */
     public void promoteStatus(){ }
 
     public void demoteStatus(){
         getPartner().setStatus(new NormalStatus(getPartner(), getPoints()));
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getStatus(){
         return "ELITE";

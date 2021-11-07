@@ -11,6 +11,10 @@ public class DerivedProduct extends Product{
         _alpha = alpha;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getAllComponents(){
         String returnString = "";
 
@@ -23,6 +27,10 @@ public class DerivedProduct extends Product{
         return returnString;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return super.toString() + getAllComponents();

@@ -10,6 +10,10 @@ public class RecipeComponent implements Serializable{
         _productQuantity = productQuantity;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return _product.getProductId() + ":" + _productQuantity;

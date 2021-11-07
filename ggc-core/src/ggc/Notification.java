@@ -10,6 +10,10 @@ public abstract class Notification implements Serializable{
         _productPrice = productPrice;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return _productId + "|" + _productPrice;

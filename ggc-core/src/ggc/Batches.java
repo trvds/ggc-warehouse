@@ -17,27 +17,52 @@ public class Batches implements Serializable, Comparable<Batches>{
         _price = price;
     }
 
+    
+    /** 
+     * @return Product
+     */
     public Product getProduct(){
         return _product;
     }
 
+    
+    /** 
+     * @return Partner
+     */
     public Partner getPartner(){
         return _partner;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getQuantity(){
         return _quantity;
     }
 
+    
+    /** 
+     * @return double
+     */
     public double getPrice(){
         return _price;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return _product.getProductId() + "|" + _partner.getPartnerId() + "|" + Math.round(_price) + "|" + _quantity + "\n";
     }
 
+    
+    /** 
+     * @param comparedBatch
+     * @return int
+     */
     @Override
     public int compareTo(Batches comparedBatch){
         Collator myCollator = Collator.getInstance();

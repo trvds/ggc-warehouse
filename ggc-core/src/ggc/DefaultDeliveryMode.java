@@ -4,6 +4,13 @@ public class DefaultDeliveryMode implements DeliveryMode{
     private static final long serialVersionUID = 202012040059L;
 
 
+    
+    /** 
+     * @param productId
+     * @param price
+     * @param event
+     * @return Notification
+     */
     @Override
     public Notification deliverNotification(String productId, double price, String event) {
         Notification notification = null;

@@ -6,10 +6,18 @@ public class BuyTransaction extends Transaction{
         super(id, paymentDate, productId, partnerId, quantity, price);
     }
 
+    
+    /** 
+     * @return String
+     */
     public String transactionType(){
         return "COMPRA";
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return transactionType() + "|" + super.toString() + getPaymentDate();

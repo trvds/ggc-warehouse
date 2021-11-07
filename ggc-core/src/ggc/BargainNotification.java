@@ -6,6 +6,10 @@ public class BargainNotification extends Notification{
         super(productId, productPrice);
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return "BARGAIN|" + super.toString();

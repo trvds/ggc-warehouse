@@ -29,20 +29,38 @@ public class Partner implements Serializable, ProductObserver{
         _totalSold = 0;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getPartnerId(){
         return _id;
     }
 
+    
+    /** 
+     * @param productId
+     * @param price
+     * @param event
+     */
     @Override
     public void update(String productId, double price, String event) {
         _notifications.add(_deliveryMode.deliverNotification(productId, price, event));
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString(){
         return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + _totalBought + "|" + _totalSold + "|" + _totalPaid;
     }
 
+    
+    /** 
+     * @return ArrayList<String>
+     */
     public ArrayList<String> getNotifications(){
         ArrayList<String> returnList = new ArrayList<String>();
         for(Notification notification: _notifications){
@@ -57,6 +75,10 @@ public class Partner implements Serializable, ProductObserver{
         this._notifications = new ArrayList<Notification>();
     }
 
+    
+    /** 
+     * @param status
+     */
     public void setStatus(Status status){
         _status = status;
     }
@@ -65,14 +87,27 @@ public class Partner implements Serializable, ProductObserver{
         _status.updateStatus();
     }
 
+    
+    /** 
+     * @param transaction
+     */
     public void registerTransaction(Transaction transaction){
         _transactions.put(transaction.getId(), transaction);
     }
 
+    
+    /** 
+     * @param id
+     * @return Transaction
+     */
     public Transaction getTransaction(int id){
         return _transactions.get(id);
     }
 
+    
+    /** 
+     * @return ArrayList<Transaction>
+     */
     public ArrayList<Transaction> getBuyTransactions(){
         ArrayList<Transaction> returnList = new ArrayList<Transaction>();
         

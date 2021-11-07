@@ -24,6 +24,10 @@ public class SelectionStatus extends Status{
     }
       
     
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getStatus(){
         return "SELECTION";

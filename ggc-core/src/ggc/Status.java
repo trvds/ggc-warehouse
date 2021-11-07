@@ -10,14 +10,26 @@ public abstract class Status implements Serializable{
         _points = points;
     }
 
+    
+    /** 
+     * @return Partner
+     */
     public Partner getPartner(){
         return _partner;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getPoints(){
         return _points;
     }
 
+    
+    /** 
+     * @param points
+     */
     public void setPoints(int points){
         _points = points;
     }
