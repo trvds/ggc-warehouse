@@ -219,7 +219,7 @@ public class WarehouseManager {
    * @param partnerId
    * @throws PartnerUnknownKeyException
    */
-  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException{
+  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException, ProductUnknownKeyException{
     _warehouse.toggleNotifications(productId, partnerId);
   }
 

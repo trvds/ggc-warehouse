@@ -415,11 +415,13 @@ public class Warehouse implements Serializable {
    * @param partnerId - id of the partner
    * @throws PartnerUnknownKeyException
    */
-  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException{
+  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException, ProductUnknownKeyException{
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
     if (partner == null)
       throw new PartnerUnknownKeyException(partnerId);
+    if (product == null)
+      throw new ProductUnknownKeyException(productId);
       
     product.toggleNotifications(partner);
   }
