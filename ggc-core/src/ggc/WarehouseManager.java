@@ -1,8 +1,6 @@
 package ggc;
 import ggc.exceptions.*;
 import java.io.*;
-import ggc.app.exceptions.ProductUnavailableException;
-
 import java.util.ArrayList;
 /** Façade for access. */
 public class WarehouseManager {

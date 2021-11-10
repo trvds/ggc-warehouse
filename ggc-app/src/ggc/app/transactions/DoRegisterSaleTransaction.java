@@ -4,10 +4,11 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.WarehouseManager;
 import ggc.exceptions.PartnerUnknownKeyException;
+import ggc.exceptions.ProductUnavailableException;
 import ggc.exceptions.ProductUnknownKeyException;
 import ggc.app.exceptions.UnknownPartnerKeyException;
 import ggc.app.exceptions.UnknownProductKeyException;
-
+import ggc.app.exceptions.UnavailableProductException;
 /**
  * 
  */
@@ -38,6 +39,9 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
     catch (PartnerUnknownKeyException e) {
       throw new UnknownPartnerKeyException(e.getId());
     }
+    catch (ProductUnavailableException e) {
+      throw new UnavailableProductException(e.getId(), e.getAmount(), e.getTotalStock());
+    } 
   }
 
 }
