@@ -1,5 +1,6 @@
 package ggc;
 import java.io.Serializable;
+import java.lang.Math;
 
 public abstract class Notification implements Serializable{
     private String _productId;
@@ -16,6 +17,6 @@ public abstract class Notification implements Serializable{
      */
     @Override
     public String toString(){
-        return _productId + "|" + _productPrice;
+        return _productId + "|" + Math.round(_productPrice);
     }
 }

@@ -21,6 +21,8 @@ public class Warehouse implements Serializable {
   private int _date = 0;
   /** Balance of the warehouse */
   private double _balance = 0;
+  /** Accounting balance of the warehouse */
+  private double _accountingBalance = 0;
   /** Number of transactions that have happened in the warehouse */
   private int _transactionCounter = 0;
 
@@ -58,12 +60,10 @@ public class Warehouse implements Serializable {
           case "BATCH_S" -> {
                               registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]));
                               registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
-                              wipeAllPartnerNotifications();
                             } // BATCH_S|idProduto|idParceiro|preço|stock-actual
           case "BATCH_M" -> {
                               registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]), Double.valueOf(fields[5]), defineRecipe(fields[6]));
                               registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
-                              wipeAllPartnerNotifications();
                             } // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
 
            default -> throw new BadEntryException(fields[0]);
@@ -100,6 +100,12 @@ public class Warehouse implements Serializable {
    */
   public double getBalance(){
     return _balance;
+  }
+
+
+
+  public double getAccountingBalance(){
+    return _accountingBalance;
   }
 
   
@@ -231,13 +237,16 @@ public class Warehouse implements Serializable {
       for(Map.Entry<String,Partner> entry : _partners.entrySet()){
         product.registerObserver(entry.getValue());   
       }
-      product.notify(maxPrice, "NEW");
       _products.put(productId, product);
     }
     else {
       Product product = _products.get(productId);
       if (product.getMaxPrice() < maxPrice)
         product.setMaxPrice(maxPrice);
+
+      if(product.getTotalStock() == 0)
+        product.notify(maxPrice, "NEW");
+
       product.setTotalStock(product.getTotalStock() + totalStock);
     }
   }
@@ -257,14 +266,17 @@ public class Warehouse implements Serializable {
       for(Map.Entry<String,Partner> entry : _partners.entrySet()){
         product.registerObserver(entry.getValue());   
       }
-      product.notify(maxPrice, "NEW");
       _products.put(productId, product);
     }
     else{
       Product product = _products.get(productId);
       if (product.getMaxPrice() < maxPrice)
         product.setMaxPrice(maxPrice);
-      product.setTotalStock(product.getTotalStock() + totalStock);
+      
+      if(product.getTotalStock() == 0)
+        product.notify(maxPrice, "NEW");
+      
+        product.setTotalStock(product.getTotalStock() + totalStock);
     }
   }
 
@@ -358,11 +370,20 @@ public class Warehouse implements Serializable {
       }
 
       Transaction transaction = new BuyTransaction(_transactionCounter, _date, productId, partnerId, quantity, price);
-      _transactionCounter += 1;
       _transactions.put(_transactionCounter, transaction);
       partner.registerTransaction(transaction);
+      _transactionCounter++;
       partner.addTotalBought(price*quantity);
+      Double lowestPrice;
+      if (_batches.get(productId) != null){
+        lowestPrice = getLowestProductPrice(productId);
+        if (lowestPrice != null && price < lowestPrice)
+          product.notify(price, "BARGAIN");
+      }
       registerBatches(productId, partnerId, price, quantity);
+      /* warehouse pays */
+      _balance -= price*quantity;
+      _accountingBalance -= price*quantity;
   }
 
  
@@ -391,6 +412,7 @@ public class Warehouse implements Serializable {
     partner.registerTransaction(newSaleTransaction);
     _transactionCounter += 1;
 
+    _accountingBalance += totalPrice;
   }
 
 
@@ -461,6 +483,31 @@ public class Warehouse implements Serializable {
     String returnString = "";
     for(Transaction transaction: partner.getSellBreakdownTransactions()){
       returnString += transaction.toString() + "\n";
+    }
+    return returnString;
+  }
+
+  public double getLowestProductPrice(String productId){
+    TreeSet<Batches> batches = _batches.get(productId);
+    Double price = null;
+    for(Batches batch: batches){
+      if (price == null)
+        price = batch.getPrice();
+      if (price > batch.getPrice())
+        price = batch.getPrice();
+    }
+    return price;
+  }
+
+
+  public String getBatchesByPrice(double price){
+    String returnString = "";
+    for(Map.Entry<String, TreeSet<Batches>> entry : _batches.entrySet()){
+      TreeSet<Batches> productSet = entry.getValue();
+      for(Batches batch: productSet){
+        if (batch.getPrice() <= price)
+          returnString += batch.toString();
+      }
     }
     return returnString;
   }

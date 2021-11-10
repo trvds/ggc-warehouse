@@ -1,6 +1,7 @@
 package ggc;
 
 import java.io.Serializable;
+import java.lang.Math;
 
 public abstract class Transaction implements Serializable {
     private int _id;
@@ -47,6 +48,6 @@ public abstract class Transaction implements Serializable {
      */
     @Override
     public String toString(){
-        return  _id + "|" + _partnerId + "|" + _productId + "|" + _quantity + "|" + _price;
+        return  _id + "|" + _partnerId + "|" + _productId + "|" + _quantity + "|" + Math.round(_price*_quantity);
     }
 }

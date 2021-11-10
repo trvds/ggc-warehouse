@@ -86,6 +86,6 @@ public class DerivedProduct extends Product {
      */
     @Override
     public String toString(){
-        return super.toString() + getAllComponents();
+        return super.toString() + "|" + _alpha + "|" + getAllComponents();
     }
 }

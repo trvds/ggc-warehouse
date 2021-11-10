@@ -17,8 +17,8 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
   public DoRegisterSaleTransaction(WarehouseManager receiver) {
     super(Label.REGISTER_SALE_TRANSACTION, receiver);
     addStringField("partnerId", Prompt.partnerKey());
-    addStringField("productId", Prompt.productKey());
     addIntegerField("paymentDeadline", Prompt.paymentDeadline());
+    addStringField("productId", Prompt.productKey());
     addIntegerField("transactionAmount", Prompt.amount());
   }
 
@@ -26,8 +26,8 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
 
     String partnerId = stringField("partnerId");
-    String productId = stringField("productId");
     int paymentDeadline = integerField("paymentDeadline");
+    String productId = stringField("productId");
     int amount = integerField("transactionAmount");
     try {
       _receiver.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);

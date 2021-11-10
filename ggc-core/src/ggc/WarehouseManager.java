@@ -89,6 +89,15 @@ public class WarehouseManager {
     return _warehouse.getBalance();
   }
 
+
+  /**
+   * 
+   * @return double
+   */
+  public double getAccountingBalance(){
+    return _warehouse.getAccountingBalance();
+  }
+
   
   /** 
    * @param id
@@ -240,5 +249,9 @@ public class WarehouseManager {
    */
   public String getPartnerSellBreakdownTransactions(String partnerId) throws PartnerUnknownKeyException{
     return _warehouse.getPartnerSellBreakdownTransactions(partnerId);
+  }
+
+  public String getBatchesByPrice(double price){
+    return _warehouse.getBatchesByPrice(price);
   }
 }

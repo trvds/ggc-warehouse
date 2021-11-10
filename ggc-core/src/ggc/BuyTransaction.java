@@ -20,7 +20,7 @@ public class BuyTransaction extends Transaction{
      */
     @Override
     public String toString(){
-        return transactionType() + "|" + super.toString() + getPaymentDate();
+        return transactionType() + "|" + super.toString() + "|" + getPaymentDate();
     }
 
 }
