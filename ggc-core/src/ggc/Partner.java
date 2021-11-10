@@ -45,7 +45,7 @@ public class Partner implements ProductObserver {
      */
     @Override
     public void update(String productId, double price, String event) {
-        _notifications.add(_deliveryMode.deliverNotification(productId, price, event));
+        _notifications.add(_deliveryMode.sendNotification(productId, price, event));
     }
 
     
