@@ -1,5 +1,4 @@
 package ggc;
-import ggc.app.exceptions.UnavailableProductException;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -356,7 +355,7 @@ public class Warehouse implements Serializable {
       registerBatches(productId, partnerId, price, quantity);
   }
  
-  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, UnavailableProductException {
+  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException{
     //TODO everything
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
@@ -385,7 +384,7 @@ public class Warehouse implements Serializable {
       }
     }
     if (enoughQuantity == false) {
-      throw new UnavailableProductException(productId, amount, haveAmount);
+      throw new ProductUnavailableException(productId, amount, haveAmount);
     }
     //-----------------
     haveAmount = 0;
