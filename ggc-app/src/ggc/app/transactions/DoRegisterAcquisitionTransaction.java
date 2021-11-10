@@ -30,16 +30,19 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
     String productId = stringField("productId");
     double price = realField("price");
     int quantity = integerField("quantity");
+    boolean registerBatch = false;
 
     ArrayList<RecipeComponent> recipe = new ArrayList<RecipeComponent>();
     Product product = _receiver.getProduct(productId);
     boolean addRecipe = false;
+    boolean batchWithNewProduct = false;
     try{
       _receiver.registerBuyTransaction(partnerId, productId, price, quantity);
     } catch( PartnerUnknownKeyException e){
       throw new UnknownPartnerKeyException(e.getId());
     } catch (ProductUnknownKeyException e){
       addRecipe = Form.confirm(Prompt.addRecipe());
+      batchWithNewProduct = true;
     }
 
     if (addRecipe == true){
@@ -54,16 +57,17 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
       double alpha = Form.requestReal(Prompt.alpha());
       _receiver.registerProduct(productId, quantity, price, alpha, recipe);
     }
-    else
+    else{
       _receiver.registerProduct(productId, quantity, price);
-
-    try{      
-      _receiver.registerBuyTransaction(partnerId, productId, price, quantity);
-    }catch (ProductUnknownKeyException e){
-      throw new UnknownProductKeyException(e.getId());
-    }catch (PartnerUnknownKeyException e){
-      throw new UnknownPartnerKeyException(e.getId());
     }
-
+    if(batchWithNewProduct == true){  
+      try{      
+        _receiver.registerBuyTransaction(partnerId, productId, price, quantity);
+      }catch (ProductUnknownKeyException e){
+        throw new UnknownProductKeyException(e.getId());
+      }catch (PartnerUnknownKeyException e){
+        throw new UnknownPartnerKeyException(e.getId());
+      }
+    }
   }
 }
