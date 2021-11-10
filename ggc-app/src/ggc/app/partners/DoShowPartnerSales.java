@@ -12,12 +12,16 @@ class DoShowPartnerSales extends Command<WarehouseManager> {
 
   DoShowPartnerSales(WarehouseManager receiver) {
     super(Label.SHOW_PARTNER_SALES, receiver);
-    //FIXME add command fields
+    addStringField("partnerId", Prompt.partnerKey());
   }
 
   @Override
   public void execute() throws CommandException {
-    //FIXME implement command
+    String partnerId = stringField("partnerId");
+    try{
+      _display.popup(_receiver.getPartnerSellBreakdownTransactions(partnerId));
+    } catch (PartnerUnknownKeyException e){
+      throw new UnknownPartnerKeyException(e.getId());
+    }
   }
-
 }

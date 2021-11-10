@@ -238,4 +238,13 @@ public class WarehouseManager {
   public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
     return _warehouse.getPartnerBuyTransactions(partnerId);
   }
+
+    /** 
+   * @param partnerId
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
+  public String getPartnerSellBreakdownTransactions(String partnerId) throws PartnerUnknownKeyException{
+    return _warehouse.getPartnerSellBreakdownTransactions(partnerId);
+  }
 }
