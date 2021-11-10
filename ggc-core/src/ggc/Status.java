@@ -38,4 +38,5 @@ public abstract class Status implements Serializable{
     public abstract void demoteStatus();
     public abstract void updateStatus();
     public abstract String getStatus();
+    public abstract double calculatePrice(int date, int n, int deadline, double price);
 }

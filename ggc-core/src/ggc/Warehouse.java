@@ -432,4 +432,23 @@ public class Warehouse implements Serializable {
     }
     return returnString;
   }
+
+  /**
+   * Function to get the Sell and Breakdown Transactions of a partner 
+   * @param partnerId - id of the partner
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
+  public String getPartnerSellBreakdownTransactions(String partnerId) throws PartnerUnknownKeyException{
+    Partner partner = _partners.get(partnerId);
+    
+    if (partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+
+    String returnString = "";
+    for(Transaction transaction: partner.getSellBreakdownTransactions()){
+      returnString += transaction.toString() + "\n";
+    }
+    return returnString;
+  }
 }

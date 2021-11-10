@@ -118,4 +118,20 @@ public class Partner implements ProductObserver {
 
         return returnList;
     }
+
+    /**
+     * 
+     * @return ArrayList<Transaction>
+     */
+    public ArrayList<Transaction> getSellBreakdownTransactions(){
+        ArrayList<Transaction> returnList = new ArrayList<Transaction>();
+        
+        for(Map.Entry<Integer,Transaction> entry : _transactions.entrySet()){
+            Transaction transaction = entry.getValue();
+            if (transaction.transactionType() == "VENDA" || transaction.transactionType() == "DESAGREGAÇÃO")
+                returnList.add(transaction);   
+        }
+
+        return returnList;
+    }
 }
