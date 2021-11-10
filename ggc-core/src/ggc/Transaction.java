@@ -40,7 +40,7 @@ public abstract class Transaction implements Serializable {
      * @return String - type of the transaction ("COMPRA", "VENDA", "DESAGREGAÇÃO")
      */
     public abstract String transactionType();
-    
+
     
     /** 
      * @return String

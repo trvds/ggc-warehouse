@@ -2,6 +2,7 @@ package ggc;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import java.lang.Math;
 
 public class Partner implements ProductObserver {
     private String _id;
@@ -9,9 +10,9 @@ public class Partner implements ProductObserver {
     private String _adress;
     private int _points;
     private Status _status;
-    private int _totalBought;
-    private int _totalSold;
-    private int _totalPaid;
+    private double _totalBought;
+    private double _totalSold;
+    private double _totalPaid;
     private ArrayList<Notification> _notifications = new ArrayList<Notification>();
     private DeliveryMode _deliveryMode = new DefaultDeliveryMode();
     private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
@@ -53,7 +54,7 @@ public class Partner implements ProductObserver {
      */
     @Override
     public String toString(){
-        return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + _totalBought + "|" + _totalSold + "|" + _totalPaid;
+        return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + Math.round(_totalBought) + "|" + Math.round(_totalSold) + "|" + Math.round(_totalPaid);
     }
 
     
@@ -103,6 +104,9 @@ public class Partner implements ProductObserver {
         return _transactions.get(id);
     }
 
+    public void addTotalBought(double totalBought){
+        _totalBought += totalBought;
+    }
     
     /** 
      * @return ArrayList<Transaction>

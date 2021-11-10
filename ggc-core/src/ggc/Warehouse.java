@@ -58,10 +58,12 @@ public class Warehouse implements Serializable {
           case "BATCH_S" -> {
                               registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]));
                               registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                              wipeAllPartnerNotifications();
                             } // BATCH_S|idProduto|idParceiro|preço|stock-actual
           case "BATCH_M" -> {
                               registerProduct(fields[1], Integer.valueOf(fields[4]), Double.valueOf(fields[3]), Double.valueOf(fields[5]), defineRecipe(fields[6]));
                               registerBatches(fields[1], fields[2], Double.valueOf(fields[3]), Integer.valueOf(fields[4]));
+                              wipeAllPartnerNotifications();
                             } // BATCH_M|idProduto|idParceiro|preço|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
 
            default -> throw new BadEntryException(fields[0]);
@@ -328,6 +330,13 @@ public class Warehouse implements Serializable {
   }
 
   
+  public void wipeAllPartnerNotifications(){
+    for(Map.Entry<String,Partner> partner: _partners.entrySet()){
+      partner.getValue().wipeNotifications();
+    }
+  }
+
+
   /** 
    * Function that registers a buy transaction in the warehouse
    * @param partnerId - id of the partner
@@ -352,6 +361,7 @@ public class Warehouse implements Serializable {
       _transactionCounter += 1;
       _transactions.put(_transactionCounter, transaction);
       partner.registerTransaction(transaction);
+      partner.addTotalBought(price*quantity);
       registerBatches(productId, partnerId, price, quantity);
   }
 
@@ -375,10 +385,11 @@ public class Warehouse implements Serializable {
 
     //TODO maybe just replace _batches with dummyBatches, more efficient
     double totalPrice = product.dummyDispatchProduct(amount, 0, _batches); //will never throw ProductUnavailableException
-    SellTransaction newSaleTransaction = new SellTransaction(++_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
+    SellTransaction newSaleTransaction = new SellTransaction(_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
 
     _transactions.put(_transactionCounter, newSaleTransaction);
     partner.registerTransaction(newSaleTransaction);
+    _transactionCounter += 1;
 
   }
 
