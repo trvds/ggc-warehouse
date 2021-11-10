@@ -5,7 +5,6 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.WarehouseManager;
 import ggc.app.exceptions.UnknownPartnerKeyException;
 import ggc.exceptions.PartnerUnknownKeyException;
-import ggc.exceptions.PartnerUnknownKeyException;
 
 /**
  * Show batches supplied by partner.

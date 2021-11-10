@@ -3,9 +3,10 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.WarehouseManager;
-//FIXME import classes
 import ggc.exceptions.PartnerUnknownKeyException;
 import ggc.exceptions.ProductUnknownKeyException;
+import ggc.app.exceptions.UnknownPartnerKeyException;
+import ggc.app.exceptions.UnknownProductKeyException;
 
 /**
  * 
@@ -21,14 +22,8 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
   }
 
   @Override
-  public final void execute() throws CommandException{
-    /*TODO
-    Para registar uma venda, é pedido o identificador do parceiro,
-     a data limite para o pagamento (Prompt.paymentDeadline()), o identificador do produto a vender 
-     e a respectiva quantidade (Prompt.amount()). Se a quantidade for superior às existências actuais,
-      deve ser lançada a excepção UnavailableProductException (não se realiza a venda).
+  public final void execute() throws CommandException {
 
- */
     String partnerId = stringField("partnerId");
     String productId = stringField("productId");
     int paymentDeadline = integerField("paymentDeadline");
@@ -37,10 +32,12 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
       _receiver.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);
 
     }
-    catch (Exception e){
-      //FIXME
+    catch (ProductUnknownKeyException e){
+      throw new UnknownProductKeyException(e.getId());
     }
-
+    catch (PartnerUnknownKeyException e) {
+      throw new UnknownPartnerKeyException(e.getId());
+    }
   }
 
 }

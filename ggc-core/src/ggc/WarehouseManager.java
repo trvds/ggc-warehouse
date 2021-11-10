@@ -1,10 +1,7 @@
 package ggc;
-//FIXME import classes (cannot import from pt.tecnico or ggc.app)
-
 import ggc.exceptions.*;
 import java.io.*;
-import ggc.RecipeComponent;
-import ggc.app.exceptions.UnavailableProductException;
+import ggc.app.exceptions.ProductUnavailableException;
 
 import java.util.ArrayList;
 /** Façade for access. */
@@ -189,7 +186,7 @@ public class WarehouseManager {
    * @return Product
    */
   //partnerId, productId, paymentDeadline, amount);
-  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, UnavailableProductException{
+  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     _warehouse.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);
   }
 

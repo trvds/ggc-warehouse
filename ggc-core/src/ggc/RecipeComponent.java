@@ -10,7 +10,13 @@ public class RecipeComponent implements Serializable{
         _productQuantity = productQuantity;
     }
 
-    
+    public Product getProduct() {
+        return _product;
+    }
+    public int getProductQuantity() {
+        return _productQuantity;
+    }
+
     /** 
      * @return String
      */

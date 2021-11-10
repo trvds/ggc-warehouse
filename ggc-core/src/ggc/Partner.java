@@ -1,10 +1,9 @@
 package ggc;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Partner implements Serializable, ProductObserver{
+public class Partner implements ProductObserver {
     private String _id;
     private String _name;
     private String _adress;

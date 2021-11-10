@@ -13,7 +13,6 @@ public class Batches implements Serializable, Comparable<Batches>{
     
     public final static Comparator<Batches> PRICE_COMPARATOR = new PriceComparator();
 
-
     public Batches(Product product, Partner partner, int quantity, double price){
         _product = product;
         _partner = partner;
@@ -49,7 +48,7 @@ public class Batches implements Serializable, Comparable<Batches>{
     /** 
      * @return double
      */
-    public void withdraw(int amount){
+    public void withdraw(int amount) {
         if (amount <= _quantity) {
             _quantity -= amount;
         }
@@ -57,7 +56,7 @@ public class Batches implements Serializable, Comparable<Batches>{
             System.out.println("FIXME - Undefined behaviour"); //FIXME
     }
 
-    public double getPrice(){
+    public double getPrice() {
         return _price;
     }
 
@@ -66,7 +65,7 @@ public class Batches implements Serializable, Comparable<Batches>{
      * @return String
      */
     @Override
-    public String toString(){
+    public String toString() {
         return _product.getProductId() + "|" + _partner.getPartnerId() + "|" + Math.round(_price) + "|" + _quantity + "\n";
     }
 
@@ -76,7 +75,7 @@ public class Batches implements Serializable, Comparable<Batches>{
      * @return int
      */
     @Override
-    public int compareTo(Batches comparedBatch){
+    public int compareTo(Batches comparedBatch) {
         Collator myCollator = Collator.getInstance();
         String comparedProduct = comparedBatch.getProduct().getProductId();
         String comparedPartner = comparedBatch.getPartner().getPartnerId();
