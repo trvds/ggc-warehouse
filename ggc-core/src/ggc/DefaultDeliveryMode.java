@@ -1,8 +1,6 @@
 package ggc;
 
 public class DefaultDeliveryMode implements DeliveryMode{
-    private static final long serialVersionUID = 202012040059L;
-
     /** 
      * @param productId
      * @param price
