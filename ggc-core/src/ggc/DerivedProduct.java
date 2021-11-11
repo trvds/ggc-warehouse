@@ -37,13 +37,12 @@ public class DerivedProduct extends Product {
     }
 
     @Override
-    public boolean canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) {
+    public void canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
 
         if (totalStock >= amount){
             productsStock.remove(getProductId());
             productsStock.put(getProductId(), totalStock - amount);
-            return true;
         }
         else {
             int neededAmount = amount - totalStock;
@@ -51,11 +50,9 @@ public class DerivedProduct extends Product {
             productsStock.put(getProductId(), totalStock - amount);
             for (RecipeComponent component: _recipe) {
                 Product componentProduct = component.getProduct();
-                if (componentProduct.canDispatchProduct(neededAmount * component.getProductQuantity(), productsStock) == false)
-                    return false;
+                componentProduct.canDispatchProduct(neededAmount * component.getProductQuantity(), productsStock);
             }
         }  
-        return true;
     }
     /*TODO:
     - cada vez que algo é consumido, alterar o stock do respetivo produto

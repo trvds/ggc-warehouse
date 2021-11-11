@@ -407,8 +407,7 @@ public class Warehouse implements Serializable {
       productsStock.put(p.getProductId(), p.getTotalStock());
     }
 
-    if (product.canDispatchProduct(amount, productsStock) == false)
-      throw new ProductUnavailableException(product.getProductId(), amount, product.getTotalStock());
+    product.canDispatchProduct(amount, productsStock);
 
     double totalPrice = product.doDispatchProduct(amount, 0, _batches);
     return totalPrice;

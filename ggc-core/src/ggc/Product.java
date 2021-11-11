@@ -32,13 +32,12 @@ public class Product implements ObservableProduct {
         return _n;
     }
     
-    public boolean canDispatchProduct(int amount, TreeMap<String, Integer> productsStock){
+    public void canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
         if (totalStock < amount)
-          return false;
+          throw new ProductUnavailableException(getProductId(), amount, totalStock);
         productsStock.remove(getProductId());
         productsStock.put(getProductId(), totalStock - amount);
-        return true ;
     }
 
     public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
