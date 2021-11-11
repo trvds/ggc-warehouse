@@ -1,5 +1,7 @@
 package ggc;
 
+import java.lang.Math;
+
 public class SellTransaction extends Transaction{
     private int _paymentDeadline;
     private double _paymentPrice;
@@ -25,7 +27,9 @@ public class SellTransaction extends Transaction{
      */
     @Override
     public String toString(){
-        return transactionType() + "|" + super.toString() + "|" + _paymentPrice + "|" + _paymentDeadline + "|" + getPaymentDate();
+        if (_paid)
+            return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + _paymentDeadline + "|" + getPaymentDate();
+        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + _paymentDeadline;
     }
 
 }
