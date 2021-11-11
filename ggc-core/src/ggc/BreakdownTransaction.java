@@ -6,7 +6,7 @@ public class BreakdownTransaction extends Transaction {
     private String _recipe;
 
 
-    public BreakdownTransaction(int id, int date, String productId, String partnerId, int quantity, double price, double paymentPrice,String recipe){
+    public BreakdownTransaction(int id, int date, String productId, String partnerId, int quantity, double price, double paymentPrice, String recipe){
         super(id, date, productId, partnerId, quantity, price);
         _recipe = recipe; 
         _paymentPrice = paymentPrice;
@@ -26,7 +26,7 @@ public class BreakdownTransaction extends Transaction {
      */
     @Override
     public String toString(){
-        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + getDate() + "|" + getPaymentDate() + "|" + _recipe;
+        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + getDate()  + "|" + _recipe;
     }
 
 }
