@@ -464,7 +464,7 @@ public class Warehouse implements Serializable {
       registerProduct(componentProductId,  component.getProductQuantity() * quantity, batchPrice);
     
     }
-    finalPrice -= sellProductPrice;
+    finalPrice = sellProductPrice - finalPrice;
     if (finalPrice < 0) {
       finalPrice = 0;
     }  
@@ -490,7 +490,8 @@ public class Warehouse implements Serializable {
    * @throws TransactionUnknownKeyException
    */
   public String getTransaction(int id) throws TransactionUnknownKeyException{
-    Transaction transaction = _transactions.get(id);
+    Integer transactionId = id;
+    Transaction transaction = _transactions.get(transactionId);
     if (transaction == null){
       throw new TransactionUnknownKeyException(id);
     }
