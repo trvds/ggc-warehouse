@@ -423,6 +423,9 @@ public class Warehouse implements Serializable {
 
     _transactions.put(_transactionCounter, newSaleTransaction);
     partner.registerTransaction(newSaleTransaction);
+    int points = (int)totalPrice*10;
+    partner.updateStatus(points);
+    partner.updateSold(totalPrice);
     _transactionCounter++;
     _accountingBalance += totalPrice;
   }
@@ -477,10 +480,7 @@ public class Warehouse implements Serializable {
     _balance += finalPrice;
     _accountingBalance += finalPrice;
 
-
-
     _transactionCounter++;
-
   }
 
   /** 
@@ -599,6 +599,7 @@ public class Warehouse implements Serializable {
       double finalPrice = partner.calculatePrice(_date, product.getN(), transaction.getDeadline(), transaction.getBasePrice());
       _balance += finalPrice;
       transaction.setPaid();
+      transaction.setPaymentDate(_date);
       partner.updatePaid(finalPrice);
     }
   }

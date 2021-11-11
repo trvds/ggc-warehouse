@@ -52,6 +52,10 @@ public abstract class Transaction implements Serializable {
         return _date;
     }
 
+    public void setPaymentDate(int date){
+        _date = date;
+    }
+
     
     /** 
      * @return String - type of the transaction ("COMPRA", "VENDA", "DESAGREGAÇÃO")

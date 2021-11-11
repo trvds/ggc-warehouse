@@ -82,7 +82,8 @@ public class Partner implements ProductObserver {
         _status = status;
     }
 
-    public void updateStatus(){
+    public void updateStatus(int points){
+        _status.setPoints(points);
         _status.updateStatus();
     }
 
@@ -154,6 +155,9 @@ public class Partner implements ProductObserver {
         return returnList;
     }
 
+    public void updateSold(double sold){
+        _totalSold += sold;
+    }
 
     public void updatePaid(double paid){
         _totalPaid += paid;
