@@ -369,7 +369,7 @@ public class Warehouse implements Serializable {
         throw new ProductUnknownKeyException(productId);
       }
 
-      Transaction transaction = new BuyTransaction(_transactionCounter, _date, productId, partnerId, quantity, price);
+      Transaction transaction = new BuyTransaction(_transactionCounter, _date, productId, partnerId, quantity, quantity*price);
       _transactions.put(_transactionCounter, transaction);
       partner.registerTransaction(transaction);
       _transactionCounter++;
