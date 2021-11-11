@@ -60,7 +60,7 @@ public class NormalStatus extends Status{
         
         if(date >= deadline){
             setPoints(0); // remover todos pontos por atraso;
-        }
+        } else updateStatus();
         return price;
     }
 }

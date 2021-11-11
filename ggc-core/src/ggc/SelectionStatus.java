@@ -66,7 +66,7 @@ public class SelectionStatus extends Status{
         if(date >= (deadline + 2)){
             setPoints((int)(getPoints() * 0.10)); // remover 90% dos pontos por atraso de 2 dias;
             demoteStatus(); // dar demote do partner;
-        }
+        } else updateStatus();
         return price;
     }
 }

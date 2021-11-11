@@ -28,7 +28,23 @@ public abstract class Transaction implements Serializable {
         return _id;
     }
     
-    
+    public String getPartnerId(){
+        return _partnerId;
+    }
+
+    public String getProductId(){
+        return _productId;
+    }
+
+    public int getDate(){
+        return _date;
+    }
+
+
+    public double getBasePrice(){
+        return _price;
+    }
+
     /** 
      * @return int - date of the payment
      */
@@ -42,6 +58,13 @@ public abstract class Transaction implements Serializable {
      */
     public abstract String transactionType();
 
+    
+    public boolean isPaid(){
+        return true;
+    }
+
+    public void setPaid() { };
+    public int getDeadline() {return _date;};
     
     /** 
      * @return String

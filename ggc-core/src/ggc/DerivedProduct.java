@@ -14,6 +14,7 @@ public class DerivedProduct extends Product {
         super(name, maxPrice, totalStock);
         _recipe = recipe;
         _alpha = alpha;
+        setN(3);
     }
     
     @Override

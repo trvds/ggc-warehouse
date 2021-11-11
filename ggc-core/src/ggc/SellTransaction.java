@@ -21,15 +21,28 @@ public class SellTransaction extends Transaction{
         return "VENDA";
     }
 
-    
+    @Override
+    public boolean isPaid(){
+        return _paid;
+    }
+
+    @Override
+    public int getDeadline(){
+        return _paymentDeadline;
+    }
+
+    @Override
+    public void setPaid(){
+        _paid = true;
+    }
     /** 
      * @return String
      */
     @Override
     public String toString(){
         if (_paid)
-            return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + _paymentDeadline + "|" + getPaymentDate();
-        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + _paymentDeadline;
+            return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + getDeadline() + "|" + getPaymentDate();
+        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + getDeadline();
     }
 
 }

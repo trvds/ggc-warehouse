@@ -138,4 +138,8 @@ public class Partner implements ProductObserver {
 
         return returnList;
     }
+
+    public double calculatePrice(int date, int n, int deadline, double price){
+        return _status.calculatePrice(date, n, deadline, price);
+    }
 }

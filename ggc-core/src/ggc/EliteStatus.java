@@ -61,7 +61,7 @@ public class EliteStatus extends Status{
         if(date >= (deadline + 15)){
             setPoints((int)(getPoints() * 0.75)); // remover 75% dos pontos por atraso de 2 dias;
             demoteStatus(); // dar demote do partner;
-        }
+        } else updateStatus();
         return price;
     }
 }

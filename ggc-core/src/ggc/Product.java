@@ -14,6 +14,7 @@ public class Product implements ObservableProduct {
     private String _id;
     private int _totalStock;
     private double _maxPrice;
+    private int _n = 5;
 
     private HashMap<ProductObserver, Boolean> _observers = new HashMap<ProductObserver, Boolean>();
 
@@ -21,6 +22,14 @@ public class Product implements ObservableProduct {
         _id = id;
         _totalStock = totalStock;
         _maxPrice = maxPrice;
+    }
+
+    protected void setN(int n){
+        _n = n;
+    }
+
+    public int getN(){
+        return _n;
     }
     
     public boolean canDispatchProduct(int amount, TreeMap<String, Integer> productsStock){

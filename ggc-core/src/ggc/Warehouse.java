@@ -583,4 +583,22 @@ public class Warehouse implements Serializable {
     }
     return returnString;
   }
+
+  public void payTransaction(int id) throws TransactionUnknownKeyException{
+    Integer transactionId = id;
+    Transaction transaction = _transactions.get(transactionId);
+    if (transaction == null){
+      throw new TransactionUnknownKeyException(id);
+    }
+    if (transaction.transactionType() == "VENDA" && !transaction.isPaid()){
+      String partnerId = transaction.getPartnerId();
+      String productId = transaction.getProductId();
+      Partner partner = _partners.get(partnerId);
+      Product product = _products.get(productId);
+      
+      double finalPrice = partner.calculatePrice(_date, product.getN(), transaction.getDeadline(), transaction.getBasePrice());
+      _balance += finalPrice;
+      transaction.setPaid();
+    }
+  }
 }

@@ -258,4 +258,8 @@ public class WarehouseManager {
   public String getBatchesByPrice(double price){
     return _warehouse.getBatchesByPrice(price);
   }
+
+  public void payTransaction(int id) throws TransactionUnknownKeyException{
+    _warehouse.payTransaction(id);
+  }
 }
