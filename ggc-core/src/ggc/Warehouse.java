@@ -599,6 +599,7 @@ public class Warehouse implements Serializable {
       double finalPrice = partner.calculatePrice(_date, product.getN(), transaction.getDeadline(), transaction.getBasePrice());
       _balance += finalPrice;
       transaction.setPaid();
+      partner.updatePaid(finalPrice);
     }
   }
 

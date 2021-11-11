@@ -22,7 +22,6 @@ public class Partner implements ProductObserver {
         _id = id;
         _name = name;
         _adress = adress;
-        _points = 0;
         _status = new NormalStatus(this, 0);
         _totalBought = 0;
         _totalPaid = 0;
@@ -54,7 +53,7 @@ public class Partner implements ProductObserver {
      */
     @Override
     public String toString(){
-        return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + _points + "|" + Math.round(_totalBought) + "|" + Math.round(_totalSold) + "|" + Math.round(_totalPaid);
+        return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + getPoints() + "|" + Math.round(_totalBought) + "|" + Math.round(_totalSold) + "|" + Math.round(_totalPaid);
     }
 
     
@@ -95,7 +94,10 @@ public class Partner implements ProductObserver {
         _transactions.put(transaction.getId(), transaction);
     }
 
-    
+    public int getPoints(){
+        return _status.getPoints();
+    }
+
     /** 
      * @param id
      * @return Transaction
@@ -152,6 +154,10 @@ public class Partner implements ProductObserver {
         return returnList;
     }
 
+
+    public void updatePaid(double paid){
+        _totalPaid += paid;
+    }
 
     public double calculatePrice(int date, int n, int deadline, double price){
         return _status.calculatePrice(date, n, deadline, price);
