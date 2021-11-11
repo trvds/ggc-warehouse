@@ -447,13 +447,14 @@ public class Warehouse implements Serializable {
       throw new ProductUnavailableException(productId, quantity, product.getTotalStock());
     }
     
-    double sellProductPrice = doSaleTransaction(partnerId, productId, quantity);
-    
+ 
     double finalPrice = 0;
     if (product.getRecipe().size() == 0) {
       return;
     }
 
+    double sellProductPrice = doSaleTransaction(partnerId, productId, quantity);
+    
     for (RecipeComponent component: product.getRecipe()) {
       Product componentProduct = component.getProduct();
       String componentProductId = componentProduct.getProductId();
