@@ -469,11 +469,12 @@ public class Warehouse implements Serializable {
     
     }
     finalPrice = sellProductPrice - finalPrice;
+    double paymentPrice = finalPrice;
     if (finalPrice < 0) {
-      finalPrice = 0;
+      paymentPrice = 0;
     }  
     
-    BreakdownTransaction transaction = new BreakdownTransaction(_transactionCounter, _date, productId, partnerId, quantity, finalPrice, product.getAllComponents());
+    BreakdownTransaction transaction = new BreakdownTransaction(_transactionCounter, _date, productId, partnerId, quantity, finalPrice, paymentPrice, product.getAllComponents());
     
     partner.registerTransaction(transaction);
     _transactions.put(_transactionCounter, transaction);

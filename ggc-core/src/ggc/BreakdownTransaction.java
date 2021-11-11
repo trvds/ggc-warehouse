@@ -1,14 +1,15 @@
 package ggc;
+import java.lang.Math;
 
 public class BreakdownTransaction extends Transaction {
     private double _paymentPrice;
-    private int _dateDeadline;
     private String _recipe;
 
 
-    public BreakdownTransaction(int id, int paymentDate, String productId, String partnerId, int quantity, double price, String recipe){
-        super(id, paymentDate, productId, partnerId, quantity, price);
+    public BreakdownTransaction(int id, int date, String productId, String partnerId, int quantity, double price, double paymentPrice,String recipe){
+        super(id, date, productId, partnerId, quantity, price);
         _recipe = recipe; 
+        _paymentPrice = paymentPrice;
     }
 
     
@@ -25,7 +26,7 @@ public class BreakdownTransaction extends Transaction {
      */
     @Override
     public String toString(){
-        return transactionType() + "|" + super.toString() + "|" + _paymentPrice + "|" + _dateDeadline + "|" + getPaymentDate() + "|" + _recipe;
+        return transactionType() + "|" + super.toString() + "|" + Math.round(_paymentPrice) + "|" + getDate() + "|" + getPaymentDate() + "|" + _recipe;
     }
 
 }
