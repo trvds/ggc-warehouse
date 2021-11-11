@@ -13,7 +13,9 @@ public class App {
     try (var ui = Dialog.UI) {
       WarehouseManager manager = new WarehouseManager();
 
+      //FIXME before CVS
       String datafile = System.getProperty("import");
+      //String datafile = "/home/rg/po-tests/tests-ef-daily-202111101548/auto-tests/A-19-06-M-ok.import";
       if (datafile != null) {
         try {
           manager.importFile(datafile);

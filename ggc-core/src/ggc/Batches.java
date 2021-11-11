@@ -52,15 +52,16 @@ public class Batches implements Serializable, Comparable<Batches>{
         if (amount <= _quantity) {
             _quantity -= amount;
         }
-        else 
-            System.out.println("FIXME - Undefined behaviour"); //FIXME
+        else {
+            //Undefined behaviour
+        }
     }
 
     public double getPrice() {
         return _price;
     }
 
-    
+
     /** 
      * @return String
      */

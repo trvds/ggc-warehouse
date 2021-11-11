@@ -51,13 +51,13 @@ public class Product implements ObservableProduct {
             int takeAmount = amount - fulfilledAmount;
             if (b.getQuantity() > takeAmount) { //More than we need to complete
                 
-                productBatches.remove(b); // Remove original batch
+              //  productBatches.remove(b); // Remove original batch
                 totalPrice += b.getPrice() * takeAmount;
                 fulfilledAmount = amount; // <=> fulfilledAmount += takeAmount ; we're done here
 
                 b.withdraw(takeAmount);
                 setTotalStock(getTotalStock() - takeAmount);
-                productBatches.add(b); //Insert our modified batch, replacing OG
+              //  productBatches.add(b); //Insert our modified batch, replacing OG
                 break;
             }
             else if (b.getQuantity() == takeAmount) { //Just what we need - consume, destroy and leave
@@ -104,7 +104,13 @@ public class Product implements ObservableProduct {
         _totalStock = totalStock;
     }
 
-    
+    /** 
+     * @return double
+     */
+    public double getMaxPrice() {
+        return _maxPrice;
+    }
+
     /** 
      * @param maxPrice
      */
@@ -113,12 +119,6 @@ public class Product implements ObservableProduct {
     }
 
 
-    /** 
-     * @return double
-     */
-    public double getMaxPrice() {
-        return _maxPrice;
-    }
 
     public String getAllComponents() {
         return "";

@@ -447,13 +447,12 @@ public class Warehouse implements Serializable {
     }
     
  
-    double finalPrice = 0;
     if (product.getRecipe().size() == 0) {
       return;
     }
 
     double sellProductPrice = doSaleTransaction(partnerId, productId, quantity);
-    
+    double buyPrice = 0;
     for (RecipeComponent component: product.getRecipe()) {
       Product componentProduct = component.getProduct();
       String componentProductId = componentProduct.getProductId();
@@ -462,12 +461,13 @@ public class Warehouse implements Serializable {
       if (batchPrice == null) {
         batchPrice = componentProduct.getMaxPrice();
       }
-      finalPrice += batchPrice;
+
+      buyPrice += batchPrice * component.getProductQuantity() * quantity;
       registerBatches(componentProductId, partnerId, batchPrice, component.getProductQuantity() * quantity);
       registerProduct(componentProductId,  component.getProductQuantity() * quantity, batchPrice);
     
     }
-    finalPrice = sellProductPrice - finalPrice;
+    double finalPrice = sellProductPrice - buyPrice;
     double paymentPrice = finalPrice;
     if (finalPrice < 0) {
       paymentPrice = 0;

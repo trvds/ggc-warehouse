@@ -93,7 +93,7 @@ public class DerivedProduct extends Product {
             }
             else { //Not enough quantity in this batch - consume all, destroy and continue
                 fulfilledAmount += b.getQuantity();
-                totalPrice += b.getPrice();
+                totalPrice += b.getPrice() * b.getQuantity();
                 setTotalStock(getTotalStock() - b.getQuantity());
                 productBatches.remove(b);
             }
@@ -110,7 +110,11 @@ public class DerivedProduct extends Product {
 
                 double componentPrice = componentProduct.doDispatchProduct(neededComponentAmount, 0, batches);
 
-                recipePrice += componentProductQuantity * componentPrice;
+                recipePrice += componentPrice;
+            }
+            //update product max price
+            if ((recipeBasePrice * recipePrice) / fulfilledAmount > getMaxPrice()) {
+                setMaxPrice(recipeBasePrice * recipePrice / fulfilledAmount);
             }
             totalPrice += recipeBasePrice * recipePrice;
         }
