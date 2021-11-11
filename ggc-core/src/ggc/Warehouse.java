@@ -397,6 +397,7 @@ public class Warehouse implements Serializable {
   public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
+    TreeMap<String, Integer> productsStock = new TreeMap<String, Integer>();
 
     if (partner == null) {
       throw new PartnerUnknownKeyException(partnerId);
@@ -406,7 +407,12 @@ public class Warehouse implements Serializable {
       throw new ProductUnknownKeyException(productId);
     }
 
-    if (product.canDispatchProduct(amount) == false)
+    for(Map.Entry<String, Product> entry : _products.entrySet()){
+      Product p = entry.getValue();
+      productsStock.put(p.getProductId(), p.getTotalStock());
+    }
+
+    if (product.canDispatchProduct(amount, productsStock) == false)
       throw new ProductUnavailableException(product.getProductId(), amount, product.getTotalStock());
 
     double totalPrice = product.doDispatchProduct(amount, 0, _batches); //will never throw ProductUnavailableException

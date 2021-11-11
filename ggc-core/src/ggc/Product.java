@@ -4,6 +4,8 @@ import java.lang.Math;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Set;
+import java.util.TreeMap;
+
 import ggc.Batches;
 import ggc.exceptions.ProductUnavailableException;
 
@@ -21,9 +23,12 @@ public class Product implements ObservableProduct {
         _maxPrice = maxPrice;
     }
     
-    public boolean canDispatchProduct(int amount){
-        if (getTotalStock() < amount)
+    public boolean canDispatchProduct(int amount, TreeMap<String, Integer> productsStock){
+        int totalStock = productsStock.get(getProductId());
+        if (totalStock < amount)
           return false;
+        productsStock.remove(getProductId());
+        productsStock.put(getProductId(), totalStock - amount);
         return true ;
     }
 
