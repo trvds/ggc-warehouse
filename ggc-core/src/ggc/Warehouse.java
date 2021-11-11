@@ -376,16 +376,11 @@ public class Warehouse implements Serializable {
       partner.addTotalBought(price*quantity);
       
       Double lowestPrice;
-      TreeSet<Batches> batchesSet = _batches.get(productId);
+      lowestPrice = getLowestProductPrice(productId);
+      if (lowestPrice != null && price < lowestPrice)
+        product.notify(price, "BARGAIN");
 
-      if (batchesSet != null){
-        if(batchesSet.size() > 0) {
-          lowestPrice = getLowestProductPrice(productId);
-          if (lowestPrice != null && price < lowestPrice)
-            product.notify(price, "BARGAIN");
-        }
-      }
-      
+
       registerBatches(productId, partnerId, price, quantity);
       /* warehouse pays */
       _balance -= price*quantity;
@@ -393,8 +388,8 @@ public class Warehouse implements Serializable {
       
   }
 
- 
-  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
+
+  public double doSaleTransaction(String partnerId, String productId, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
 
@@ -409,16 +404,78 @@ public class Warehouse implements Serializable {
     if (product.canDispatchProduct(amount) == false)
       throw new ProductUnavailableException(product.getProductId(), amount, product.getTotalStock());
 
-    double totalPrice = product.doDispatchProduct(amount, 0, _batches); //will never throw ProductUnavailableException
+    double totalPrice = product.doDispatchProduct(amount, 0, _batches);
+    return totalPrice;
+  }
+
+  public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
+    double totalPrice = doSaleTransaction(partnerId, productId, amount);
+    //Partner and product are never null in here because of doSaleTransaction
+    Partner partner = _partners.get(partnerId);
+    Product product = _products.get(productId);
     SellTransaction newSaleTransaction = new SellTransaction(_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
 
     _transactions.put(_transactionCounter, newSaleTransaction);
     partner.registerTransaction(newSaleTransaction);
-    _transactionCounter += 1;
-
+    _transactionCounter++;
     _accountingBalance += totalPrice;
   }
 
+  //TODO javadocs
+  public void registerBreakdownTransaction(String partnerId, String productId, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException { 
+    Partner partner = _partners.get(partnerId);
+    Product product = _products.get(productId);
+
+    if (partner == null) {
+      throw new PartnerUnknownKeyException(partnerId);
+    }
+
+    if (product == null) {
+      throw new ProductUnknownKeyException(productId);
+    }
+
+    if (product.getTotalStock() < quantity) {
+      throw new ProductUnavailableException(productId, quantity, product.getTotalStock());
+    }
+    
+    double sellProductPrice = doSaleTransaction(partnerId, productId, quantity);
+    
+    double finalPrice = 0;
+    if (product.getRecipe().size() == 0) {
+      return;
+    }
+
+    for (RecipeComponent component: product.getRecipe()) {
+      Product componentProduct = component.getProduct();
+      String componentProductId = componentProduct.getProductId();
+      
+      Double batchPrice = getLowestProductPrice(componentProductId);
+      if (batchPrice == null) {
+        batchPrice = componentProduct.getMaxPrice();
+      }
+      finalPrice += batchPrice;
+      registerBatches(componentProductId, partnerId, batchPrice, component.getProductQuantity() * quantity);
+      registerProduct(componentProductId,  component.getProductQuantity() * quantity, batchPrice);
+    
+    }
+    finalPrice -= sellProductPrice;
+    if (finalPrice < 0) {
+      finalPrice = 0;
+    }  
+    
+    BreakdownTransaction transaction = new BreakdownTransaction(_transactionCounter, _date, productId, partnerId, quantity, finalPrice, product.getAllComponents());
+    
+    partner.registerTransaction(transaction);
+    _transactions.put(_transactionCounter, transaction);
+    
+    _balance += finalPrice;
+    _accountingBalance += finalPrice;
+
+
+
+    _transactionCounter++;
+
+  }
 
   /** 
    * Transaction getter from the warehouse
@@ -491,14 +548,18 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
-  public double getLowestProductPrice(String productId){
+  public Double getLowestProductPrice(String productId){
     TreeSet<Batches> batches = _batches.get(productId);
     Double price = null;
-    for(Batches batch: batches){
-      if (price == null)
-        price = batch.getPrice();
-      if (price > batch.getPrice())
-        price = batch.getPrice();
+    if (batches != null){
+      if(batches.size() > 0) {
+        for(Batches batch: batches){
+          if (price == null)
+            price = batch.getPrice();
+          if (price > batch.getPrice())
+            price = batch.getPrice();
+         }
+        }
     }
     return price;
   }

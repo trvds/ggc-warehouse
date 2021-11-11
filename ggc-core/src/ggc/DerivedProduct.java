@@ -15,6 +15,10 @@ public class DerivedProduct extends Product {
         _alpha = alpha;
     }
     
+    @Override
+    public ArrayList<RecipeComponent> getRecipe() {
+        return _recipe;
+    }
     /**
      * @return String
      */

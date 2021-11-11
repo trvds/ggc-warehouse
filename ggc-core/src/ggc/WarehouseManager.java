@@ -182,7 +182,7 @@ public class WarehouseManager {
    * @throws PartnerUnknownKeyException
    * @throws ProductUnknownKeyException
    */
-  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+  public void registerBuyTransaction(String partnerId, String productId, double price, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException {
     _warehouse.registerBuyTransaction(partnerId, productId, price, quantity);
   }
 
@@ -194,6 +194,10 @@ public class WarehouseManager {
   //partnerId, productId, paymentDeadline, amount);
   public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     _warehouse.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);
+  }
+  //TODO javadocs
+  public void registerBreakdownTransaction(String partnerId, String productId, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
+    _warehouse.registerBreakdownTransaction(partnerId, productId, quantity);
   }
 
   public Product getProduct(String productId){

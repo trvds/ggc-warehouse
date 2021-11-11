@@ -6,12 +6,12 @@ import java.util.TreeSet;
 import java.util.Set;
 import ggc.Batches;
 import ggc.exceptions.ProductUnavailableException;
+import java.util.ArrayList;
 
 public class Product implements ObservableProduct {
     private String _id;
     private int _totalStock;
     private double _maxPrice;
-    private double _maxHistoricPrice; //TODO
 
     private HashMap<ProductObserver, Boolean> _observers = new HashMap<ProductObserver, Boolean>();
 
@@ -107,6 +107,9 @@ public class Product implements ObservableProduct {
         return _maxPrice;
     }
 
+    public String getAllComponents() {
+        return "";
+    }
     
     /** 
      * @param observer
@@ -149,6 +152,10 @@ public class Product implements ObservableProduct {
         }
     }
 
+    public ArrayList<RecipeComponent> getRecipe() {
+        ArrayList<RecipeComponent> emptyRecipe = new ArrayList<RecipeComponent>();
+        return emptyRecipe;
+    }
 
     /** 
      * @return String

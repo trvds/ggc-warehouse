@@ -1,6 +1,6 @@
 package ggc;
 
-public class BreakdownTransaction extends Transaction{
+public class BreakdownTransaction extends Transaction {
     private double _paymentPrice;
     private int _dateDeadline;
     private String _recipe;
