@@ -1,6 +1,6 @@
 package ggc;
 
-public class DefaultDeliveryMode implements DeliveryMode{
+public class StandardDeliveryMode implements DeliveryMode{
     /** 
      * @param productId
      * @param price
