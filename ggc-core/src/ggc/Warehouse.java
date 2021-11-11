@@ -374,12 +374,18 @@ public class Warehouse implements Serializable {
       partner.registerTransaction(transaction);
       _transactionCounter++;
       partner.addTotalBought(price*quantity);
+      
       Double lowestPrice;
-      if (_batches.get(productId) != null){
-        lowestPrice = getLowestProductPrice(productId);
-        if (lowestPrice != null && price < lowestPrice)
-          product.notify(price, "BARGAIN");
+      TreeSet<Batches> batchesSet = _batches.get(productId);
+
+      if (batchesSet != null){
+        if(batchesSet.size() > 0) {
+          lowestPrice = getLowestProductPrice(productId);
+          if (lowestPrice != null && price < lowestPrice)
+            product.notify(price, "BARGAIN");
+        }
       }
+      
       registerBatches(productId, partnerId, price, quantity);
       /* warehouse pays */
       _balance -= price*quantity;
