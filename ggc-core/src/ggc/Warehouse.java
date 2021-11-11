@@ -601,4 +601,17 @@ public class Warehouse implements Serializable {
       transaction.setPaid();
     }
   }
+
+  public String getPartnerPaidTransactions(String partnerId) throws PartnerUnknownKeyException{
+    Partner partner = _partners.get(partnerId);
+    
+    if (partner == null)
+      throw new PartnerUnknownKeyException(partnerId);
+
+    String returnString = "";
+    for(Transaction transaction: partner.getPaidTransactions()){
+      returnString += transaction.toString() + "\n";
+    }
+    return returnString;
+  }
 }

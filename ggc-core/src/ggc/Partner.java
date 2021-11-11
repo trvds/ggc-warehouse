@@ -139,6 +139,20 @@ public class Partner implements ProductObserver {
         return returnList;
     }
 
+
+    public ArrayList<Transaction> getPaidTransactions(){
+        ArrayList<Transaction> returnList = new ArrayList<Transaction>();
+        
+        for(Map.Entry<Integer,Transaction> entry : _transactions.entrySet()){
+            Transaction transaction = entry.getValue();
+            if (transaction.transactionType() == "VENDA" && transaction.isPaid())
+                returnList.add(transaction);   
+        }
+
+        return returnList;
+    }
+
+
     public double calculatePrice(int date, int n, int deadline, double price){
         return _status.calculatePrice(date, n, deadline, price);
     }

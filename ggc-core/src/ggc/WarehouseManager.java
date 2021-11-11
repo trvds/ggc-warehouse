@@ -262,4 +262,8 @@ public class WarehouseManager {
   public void payTransaction(int id) throws TransactionUnknownKeyException{
     _warehouse.payTransaction(id);
   }
+
+  public String getPartnerPaidTransactions(String partnerId) throws PartnerUnknownKeyException{
+    return _warehouse.getPartnerPaidTransactions(partnerId);
+  }
 }
