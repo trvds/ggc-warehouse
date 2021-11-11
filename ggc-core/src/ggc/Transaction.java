@@ -48,6 +48,6 @@ public abstract class Transaction implements Serializable {
      */
     @Override
     public String toString(){
-        return  _id + "|" + _partnerId + "|" + _productId + "|" + _quantity + "|" + Math.round(_price*_quantity);
+        return  _id + "|" + _partnerId + "|" + _productId + "|" + _quantity + "|" + Math.round(_price);
     }
 }
