@@ -390,6 +390,7 @@ public class Warehouse implements Serializable {
       /* warehouse pays */
       _balance -= price*quantity;
       _accountingBalance -= price*quantity;
+      
   }
 
  
@@ -404,14 +405,11 @@ public class Warehouse implements Serializable {
     if (product == null) {
       throw new ProductUnknownKeyException(productId);
     }
-    //dummy deep copy of _batches to wreck at will without consequences;
-    Map<String, TreeSet<Batches>> dummyBatches = new TreeMap<String, TreeSet<Batches>>();
-    dummyBatches.putAll(_batches);
 
-    product.dummyDispatchProduct(amount, 0, dummyBatches); //may throw ProductUnavailableException
+    if (product.canDispatchProduct(amount) == false)
+      throw new ProductUnavailableException(product.getProductId(), amount, product.getTotalStock());
 
-    //TODO maybe just replace _batches with dummyBatches, more efficient
-    double totalPrice = product.dummyDispatchProduct(amount, 0, _batches); //will never throw ProductUnavailableException
+    double totalPrice = product.doDispatchProduct(amount, 0, _batches); //will never throw ProductUnavailableException
     SellTransaction newSaleTransaction = new SellTransaction(_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
 
     _transactions.put(_transactionCounter, newSaleTransaction);

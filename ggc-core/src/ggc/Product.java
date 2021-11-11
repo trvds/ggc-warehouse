@@ -20,8 +20,14 @@ public class Product implements ObservableProduct {
         _totalStock = totalStock;
         _maxPrice = maxPrice;
     }
+    
+    public boolean canDispatchProduct(int amount){
+        if (getTotalStock() < amount)
+          return false;
+        return true ;
+    }
 
-    public double dummyDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
+    public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
         TreeSet<Batches> productBatches = batches.get(this.getProductId());
         Set<Batches> orderedByPrice = new TreeSet<Batches>(Batches.PRICE_COMPARATOR);
         orderedByPrice.addAll(productBatches);
@@ -29,24 +35,30 @@ public class Product implements ObservableProduct {
         int fulfilledAmount = 0;
 
         for (Batches b: orderedByPrice) {
-            if (b.getQuantity() > amount - fulfilledAmount) { //More than we need to complete
+            int takeAmount = amount - fulfilledAmount;
+            if (b.getQuantity() > takeAmount) { //More than we need to complete
+                
                 productBatches.remove(b); // Remove original batch
-                fulfilledAmount += amount - fulfilledAmount; // <=> fullfilledAmount = amount ; we're done here
-                b.withdraw(amount - fulfilledAmount);
-                totalPrice += b.getPrice() / (amount - fulfilledAmount);
+                totalPrice += b.getPrice() * takeAmount;
+                fulfilledAmount = amount; // <=> fulfilledAmount += takeAmount ; we're done here
+
+                b.withdraw(takeAmount);
+                setTotalStock(getTotalStock() - takeAmount);
                 productBatches.add(b); //Insert our modified batch, replacing OG
                 break;
             }
-            else if (b.getQuantity() == amount - fulfilledAmount) { //Just what we need - consume, destroy and leave
+            else if (b.getQuantity() == takeAmount) { //Just what we need - consume, destroy and leave
                 fulfilledAmount = amount;
-                totalPrice += b.getPrice();
+                totalPrice += b.getPrice() * b.getQuantity();
                 productBatches.remove(b);
+                setTotalStock(getTotalStock() - b.getQuantity());
                 break;
             }
             else { //Not enough quantity in this batch - consume all, destroy and continue
                 fulfilledAmount += b.getQuantity();
-                totalPrice += b.getPrice();
+                totalPrice += b.getPrice() * b.getQuantity();
                 productBatches.remove(b);
+                setTotalStock(getTotalStock() - b.getQuantity());
             }
         }
         if (fulfilledAmount != amount) { //What we had was not enough for a simple product, throw Exception
@@ -54,31 +66,6 @@ public class Product implements ObservableProduct {
         }
         return totalPrice;
     }
-
-    public double dispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) {
-        TreeSet<Batches> productBatches = batches.get(this.getProductId());
-        Set<Batches> orderedByPrice = new TreeSet<Batches>(Batches.PRICE_COMPARATOR);
-        orderedByPrice.addAll(productBatches);
-
-        int haveAmount = 0;
-        for (Batches b: orderedByPrice) {
-                if (b.getQuantity() > amount - haveAmount) {
-                    //We have more in stock than we need - we're done here
-                    b.withdraw(amount-haveAmount);
-                    haveAmount += b.getQuantity();
-                    totalPrice += b.getPrice() / (amount - haveAmount);
-                    return totalPrice;
-                }
-                else if (b.getQuantity() <= amount - haveAmount) { //FIXME unnecessary condition?
-                    //We have less than we need, destroy batch and move on to next batch
-                    haveAmount += b.getQuantity();
-                    totalPrice += b.getPrice();
-                    productBatches.remove(b);
-                } 
-            }
-        return totalPrice;
-    }
-
 
     
     /** 

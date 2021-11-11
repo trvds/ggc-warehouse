@@ -18,7 +18,7 @@ public class DerivedProduct extends Product {
     /**
      * @return String
      */
-    public String getAllComponents(){
+    public String getAllComponents() {
         String returnString = "";
 
         for(int i = 0; i < _recipe.size() - 1; i++){
@@ -30,33 +30,63 @@ public class DerivedProduct extends Product {
         return returnString;
     }
 
-
     @Override
-    public double dummyDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
+    public boolean canDispatchProduct(int amount) {
+        int totalStock = getTotalStock();
+
+        if (totalStock >= amount)
+             return true;
+        else {
+            int neededAmount = amount - totalStock;
+            for (RecipeComponent component: _recipe) {
+                Product componentProduct = component.getProduct();
+                if (componentProduct.canDispatchProduct(neededAmount * component.getProductQuantity()) == false)
+                    return false;
+            }
+        }  
+        return true;
+    }
+    /*TODO:
+    - cada vez que algo é consumido, alterar o stock do respetivo produto
+    - fazer registerBreakdownTransaction
+    */
+    
+    @Override
+    public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
         TreeSet<Batches> productBatches = batches.get(this.getProductId());
+        if (productBatches == null) {
+            throw new ProductUnavailableException(getProductId(), amount, getTotalStock());
+        }
         Set<Batches> orderedByPrice = new TreeSet<Batches>(Batches.PRICE_COMPARATOR);
         orderedByPrice.addAll(productBatches);
 
         int fulfilledAmount = 0;
 
         for (Batches b: orderedByPrice) {
-            if (b.getQuantity() > amount - fulfilledAmount) { //More than we need to complete
+            int takeAmount = amount - fulfilledAmount;
+            if (b.getQuantity() > takeAmount) { //More than we need to complete
+                //TODO: previously, we did productBatches.remove(b) at the beginning and productBatches.add(b) at the end,
+                //IS this still necessary or was this because of dummy batches?
+                //I'm too tired to think about this now
                 productBatches.remove(b); //Remove OG batch
-                fulfilledAmount += amount - fulfilledAmount; // <=> fullfilledAmount = amount ; we're done here
-                b.withdraw(amount - fulfilledAmount);
-                totalPrice += b.getPrice() / (amount - fulfilledAmount);
+                totalPrice += b.getPrice() * takeAmount;
+                b.withdraw(takeAmount);
+                setTotalStock(getTotalStock() - takeAmount);
+                fulfilledAmount = amount; // <=> fulfilledAmount += amount - fulfilledAmount ; we're done here
                 productBatches.add(b); //Add our modified batch - replacing the OG one
                 break;
             }
-            else if (b.getQuantity() == amount - fulfilledAmount) { //Just what we need - consume, destroy and leave
+            else if (b.getQuantity() == takeAmount) { //Just what we need - consume, destroy and leave
                 fulfilledAmount = amount;
-                totalPrice += b.getPrice();
+                totalPrice += b.getPrice() * b.getQuantity();
+                setTotalStock(getTotalStock() - b.getQuantity());
                 productBatches.remove(b);
                 break;
             }
             else { //Not enough quantity in this batch - consume all, destroy and continue
                 fulfilledAmount += b.getQuantity();
                 totalPrice += b.getPrice();
+                setTotalStock(getTotalStock() - b.getQuantity());
                 productBatches.remove(b);
             }
         }
@@ -68,10 +98,9 @@ public class DerivedProduct extends Product {
             for (RecipeComponent component: _recipe) {
                 Product componentProduct = component.getProduct();
                 int componentProductQuantity = component.getProductQuantity();
-                int havecomponentAmount = componentProduct.getTotalStock();
-                int neededComponentAmount = (neededAmount * componentProductQuantity) - havecomponentAmount;
+                int neededComponentAmount = (neededAmount * componentProductQuantity);
 
-                double componentPrice = dummyDispatchProduct(neededComponentAmount, 0, batches);
+                double componentPrice = componentProduct.doDispatchProduct(neededComponentAmount, 0, batches);
 
                 recipePrice += componentProductQuantity * componentPrice;
             }
