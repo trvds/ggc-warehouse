@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Set;
+import java.util.TreeMap;
 import ggc.exceptions.ProductUnavailableException;
 
 public class DerivedProduct extends Product {
@@ -35,16 +36,21 @@ public class DerivedProduct extends Product {
     }
 
     @Override
-    public boolean canDispatchProduct(int amount) {
-        int totalStock = getTotalStock();
+    public boolean canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) {
+        int totalStock = productsStock.get(getProductId());
 
-        if (totalStock >= amount)
-             return true;
+        if (totalStock >= amount){
+            productsStock.remove(getProductId());
+            productsStock.put(getProductId(), totalStock - amount);
+            return true;
+        }
         else {
             int neededAmount = amount - totalStock;
+            productsStock.remove(getProductId());
+            productsStock.put(getProductId(), totalStock - amount);
             for (RecipeComponent component: _recipe) {
                 Product componentProduct = component.getProduct();
-                if (componentProduct.canDispatchProduct(neededAmount * component.getProductQuantity()) == false)
+                if (componentProduct.canDispatchProduct(neededAmount * component.getProductQuantity(), productsStock) == false)
                     return false;
             }
         }  
