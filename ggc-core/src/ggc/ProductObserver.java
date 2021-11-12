@@ -1,4 +1,5 @@
 package ggc;
+
 import java.io.Serializable;
 
 public interface ProductObserver extends Serializable{

@@ -38,8 +38,8 @@ public class Warehouse implements Serializable {
   /**
    *  Constructor
    */
-  public Warehouse(){
-  }
+  public Warehouse(){ }
+
 
   /**
    * @param txtfile filename to be loaded.
@@ -75,6 +75,7 @@ public class Warehouse implements Serializable {
     }
   }
 
+
   /**
    * Function to advance the warehouse date
    * @param days - days to advance
@@ -86,6 +87,7 @@ public class Warehouse implements Serializable {
     this._date += days;
   }
 
+
   /**
    * Function to get the warehouse date
    * @return _date - returns the warehouse date
@@ -93,6 +95,7 @@ public class Warehouse implements Serializable {
   public int showDate(){
     return this._date;
   }
+
 
   /**
    * Function to get the current balance of the warehouse
@@ -103,7 +106,10 @@ public class Warehouse implements Serializable {
   }
 
 
-
+  
+  /** 
+   * @return double
+   */
   public double getAccountingBalance(){
     return _accountingBalance;
   }
@@ -117,6 +123,7 @@ public class Warehouse implements Serializable {
   public Product getProduct(String productId) {
     return _products.get(productId);
   }
+
 
   /**
    * Function to register a Partner in the warehouse
@@ -133,12 +140,13 @@ public class Warehouse implements Serializable {
     _partners.put(id, partner);
   }
 
-/**
- * Function to get a specific Partner in the warehouse
- * @param id - id of the Partner
- * @return returnString - String of the Partner
- * @throws PartnerUnknownKeyException
- */
+
+  /**
+   * Function to get a specific Partner in the warehouse
+   * @param id - id of the Partner
+   * @return returnString - String of the Partner
+   * @throws PartnerUnknownKeyException
+   */
   public String getPartner(String id) throws PartnerUnknownKeyException{
     String returnString = "";
     Partner partner = _partners.get(id);
@@ -154,6 +162,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+
   /**
    * Function to get All the Partners in the warehouse
    * @return returnString - String of all the Partners
@@ -168,6 +177,7 @@ public class Warehouse implements Serializable {
       return returnString;
   }
 
+
   /**
    * Function to get All the Products in the warehouse
    * @return returnString - String of all the Products
@@ -180,6 +190,7 @@ public class Warehouse implements Serializable {
     }
     return returnString;
   }
+
 
   /**
    * Function to get All Batches in the warehouse
@@ -197,6 +208,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+
   /**
    * Function to register a Batch in the warehouse
    * @param productId id of the product of the batch
@@ -206,7 +218,6 @@ public class Warehouse implements Serializable {
    * @throws PartnerUnknownKeyException
    */
   public void registerBatches(String productId, String partnerId, double price, int quantity) throws PartnerUnknownKeyException {
-
     Product product = _products.get(productId);
     Partner partner = _partners.get(partnerId);
     
@@ -221,7 +232,6 @@ public class Warehouse implements Serializable {
 
     productSet.add(batch);
     _batches.put(productId, productSet);
-
   }
 
   
@@ -301,6 +311,7 @@ public class Warehouse implements Serializable {
     return recipe;
   }
 
+
   /**
    * Function to get the batches of a given partner
    * @param partnerId
@@ -322,6 +333,7 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+
   /**
    * Function to get the batches of a given product
    * @param productId
@@ -339,13 +351,6 @@ public class Warehouse implements Serializable {
       returnString += batch.toString();
     }
     return returnString;
-  }
-
-  
-  public void wipeAllPartnerNotifications(){
-    for(Map.Entry<String,Partner> partner: _partners.entrySet()){
-      partner.getValue().wipeNotifications();
-    }
   }
 
 
@@ -373,13 +378,12 @@ public class Warehouse implements Serializable {
       _transactions.put(_transactionCounter, transaction);
       partner.registerTransaction(transaction);
       _transactionCounter++;
-      partner.addTotalBought(price*quantity);
+      partner.updateBought(price*quantity);
       
       Double lowestPrice;
       lowestPrice = getLowestProductPrice(productId);
       if (lowestPrice != null && price < lowestPrice)
         product.notify(price, "BARGAIN");
-
 
       registerBatches(productId, partnerId, price, quantity);
       /* warehouse pays */
@@ -388,7 +392,17 @@ public class Warehouse implements Serializable {
       
   }
 
-
+  
+  /** 
+   * Function to do a sale transaction
+   * @param partnerId
+   * @param productId
+   * @param amount
+   * @return double
+   * @throws PartnerUnknownKeyException
+   * @throws ProductUnknownKeyException
+   * @throws ProductUnavailableException
+   */
   public double doSaleTransaction(String partnerId, String productId, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
@@ -397,7 +411,6 @@ public class Warehouse implements Serializable {
     if (partner == null) {
       throw new PartnerUnknownKeyException(partnerId);
     }
-
     if (product == null) {
       throw new ProductUnknownKeyException(productId);
     }
@@ -413,23 +426,44 @@ public class Warehouse implements Serializable {
     return totalPrice;
   }
 
+  
+  /** 
+   * 
+   * @param partnerId
+   * @param productId
+   * @param paymentDeadline
+   * @param amount
+   * @throws PartnerUnknownKeyException
+   * @throws ProductUnknownKeyException
+   * @throws ProductUnavailableException
+   */
   public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     double totalPrice = doSaleTransaction(partnerId, productId, amount);
     //Partner and product are never null in here because of doSaleTransaction
     Partner partner = _partners.get(partnerId);
-    Product product = _products.get(productId);
     SellTransaction newSaleTransaction = new SellTransaction(_transactionCounter, _date, productId, partnerId, amount, totalPrice, paymentDeadline);
 
     _transactions.put(_transactionCounter, newSaleTransaction);
     partner.registerTransaction(newSaleTransaction);
+
     int points = (int)totalPrice*10;
     partner.updateStatus(points);
     partner.updateSold(totalPrice);
+
     _transactionCounter++;
     _accountingBalance += totalPrice;
   }
 
-  //TODO javadocs
+  
+  /** 
+   * 
+   * @param partnerId
+   * @param productId
+   * @param quantity
+   * @throws PartnerUnknownKeyException
+   * @throws ProductUnknownKeyException
+   * @throws ProductUnavailableException
+   */
   public void registerBreakdownTransaction(String partnerId, String productId, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException { 
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
@@ -437,7 +471,6 @@ public class Warehouse implements Serializable {
     if (partner == null) {
       throw new PartnerUnknownKeyException(partnerId);
     }
-
     if (product == null) {
       throw new ProductUnknownKeyException(productId);
     }
@@ -445,7 +478,6 @@ public class Warehouse implements Serializable {
     if (product.getTotalStock() < quantity) {
       throw new ProductUnavailableException(productId, quantity, product.getTotalStock());
     }
-    
  
     if (product.getRecipe().size() == 0) {
       return;
@@ -454,6 +486,7 @@ public class Warehouse implements Serializable {
     double sellProductPrice = doSaleTransaction(partnerId, productId, quantity);
     double buyPrice = 0;
     String recipe = "";
+
     for (RecipeComponent component: product.getRecipe()) {
       recipe += "#";
       Product componentProduct = component.getProduct();
@@ -469,7 +502,9 @@ public class Warehouse implements Serializable {
       registerProduct(componentProductId,  component.getProductQuantity() * quantity, batchPrice);
       recipe += componentProductId + ":" + component.getProductQuantity() * quantity + ":" + Math.round(batchPrice * component.getProductQuantity() * quantity);
     }
+
     recipe = recipe.substring(1);
+
     double finalPrice = sellProductPrice - buyPrice;
     double paymentPrice = finalPrice;
     if (finalPrice < 0) {
@@ -481,13 +516,15 @@ public class Warehouse implements Serializable {
     partner.registerTransaction(transaction);
     _transactions.put(_transactionCounter, transaction);
     
-    _balance += finalPrice;
-    _accountingBalance += finalPrice;
+    _balance += paymentPrice;
+    _accountingBalance += paymentPrice;
 
     _transactionCounter++;
   }
 
+
   /** 
+   * 
    * Transaction getter from the warehouse
    * @param id - id of the transaction
    * @return String
@@ -522,6 +559,16 @@ public class Warehouse implements Serializable {
 
 
   /**
+  * Function to wipe all Notifications
+  */
+  public void wipeAllPartnerNotifications(){
+    for(Map.Entry<String,Partner> partner: _partners.entrySet()){
+      partner.getValue().wipeNotifications();
+    }
+  }
+
+  
+  /**
    * Function to get the Buy Transactions of a partner 
    * @param partnerId - id of the partner
    * @return String
@@ -539,6 +586,7 @@ public class Warehouse implements Serializable {
     }
     return returnString;
   }
+
 
   /**
    * Function to get the Sell and Breakdown Transactions of a partner 
@@ -559,6 +607,11 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+  
+  /** 
+   * @param productId
+   * @return Double
+   */
   public Double getLowestProductPrice(String productId){
     TreeSet<Batches> batches = _batches.get(productId);
     Double price = null;
@@ -575,7 +628,11 @@ public class Warehouse implements Serializable {
     return price;
   }
 
-
+  
+  /** 
+   * @param price
+   * @return String
+   */
   public String getBatchesByPrice(double price){
     String returnString = "";
     for(Map.Entry<String, TreeSet<Batches>> entry : _batches.entrySet()){
@@ -588,6 +645,11 @@ public class Warehouse implements Serializable {
     return returnString;
   }
 
+  
+  /** 
+   * @param id
+   * @throws TransactionUnknownKeyException
+   */
   public void payTransaction(int id) throws TransactionUnknownKeyException{
     Integer transactionId = id;
     Transaction transaction = _transactions.get(transactionId);
@@ -608,6 +670,12 @@ public class Warehouse implements Serializable {
     }
   }
 
+  
+  /** 
+   * @param partnerId
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
   public String getPartnerPaidTransactions(String partnerId) throws PartnerUnknownKeyException{
     Partner partner = _partners.get(partnerId);
     

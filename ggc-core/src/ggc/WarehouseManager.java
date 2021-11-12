@@ -10,9 +10,6 @@ public class WarehouseManager {
   /** The warehouse itself. */
   private Warehouse _warehouse = new Warehouse();
 
-  //FIXME define other attributes
-  //FIXME define constructor(s)
-  //FIXME define other methods
 
   /**
    * @@throws IOException
@@ -26,8 +23,8 @@ public class WarehouseManager {
     ObjectOutputStream ous = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)));
     ous.writeObject(_warehouse);
     ous.close();
-
   }
+
 
   /**
    * @@param filename
@@ -40,6 +37,7 @@ public class WarehouseManager {
     save();
   }
 
+
   /**
    * @@param filename
    * @@throws UnavailableFileException
@@ -49,8 +47,8 @@ public class WarehouseManager {
     _warehouse = (Warehouse) ois.readObject();
     ois.close();
     _filename = filename;
-
   }
+
 
   /**
    * @param textfile
@@ -66,19 +64,19 @@ public class WarehouseManager {
 
   
   /** 
+   * @return int
+   */
+  public int showDate(){
+    return _warehouse.showDate();
+  }
+
+
+  /** 
    * @param days
    * @throws NoSuchDateException
    */
   public void advanceDate(int days) throws NoSuchDateException{
     _warehouse.advanceDate(days);
-  }
-
-  
-  /** 
-   * @return int
-   */
-  public int showDate(){
-    return _warehouse.showDate();
   }
 
   
@@ -99,36 +97,7 @@ public class WarehouseManager {
   }
 
   
-  /** 
-   * @param id
-   * @param name
-   * @param adress
-   * @throws PartnerDuplicateKeyException
-   */
-  public void registerPartner(String id, String name, String adress) throws PartnerDuplicateKeyException{
-    _warehouse.registerPartner(id, name, adress);
-  }
-
-  
-  /** 
-   * @param id
-   * @return String
-   * @throws PartnerUnknownKeyException
-   */
-  public String getPartner(String id) throws PartnerUnknownKeyException{
-    return _warehouse.getPartner(id);
-  }
-
-  
-  /** 
-   * @return String
-   */
-  public String getPartners(){
-    return _warehouse.getPartners();
-  }
-
-  
-  /** 
+   /** 
    * @return String
    */
   public String getAllProducts(){
@@ -147,20 +116,79 @@ public class WarehouseManager {
   /** 
    * @param id
    * @return String
+   * @throws PartnerUnknownKeyException
+   */
+  public String getBatchesByPartner(String id) throws PartnerUnknownKeyException{
+    return _warehouse.getBatchesByPartner(id);
+  }
+
+
+  /** 
+   * @param id
+   * @return String
    * @throws ProductUnknownKeyException
    */
   public String getBatchesByProduct(String id) throws ProductUnknownKeyException{
     return _warehouse.getBatchesByProduct(id);
   }
-  
+
   
   /** 
    * @param id
    * @return String
    * @throws PartnerUnknownKeyException
    */
-  public String getBatchesByPartner(String id) throws PartnerUnknownKeyException{
-    return _warehouse.getBatchesByPartner(id);
+  public String getPartner(String id) throws PartnerUnknownKeyException{
+    return _warehouse.getPartner(id);
+  }
+
+
+    /** 
+   * @return String
+   */
+  public String getPartners(){
+    return _warehouse.getPartners();
+  }
+
+
+  /** 
+   * @param id
+   * @param name
+   * @param adress
+   * @throws PartnerDuplicateKeyException
+   */
+  public void registerPartner(String id, String name, String adress) throws PartnerDuplicateKeyException{
+    _warehouse.registerPartner(id, name, adress);
+  }
+
+
+  /** 
+   * @param productId
+   * @param partnerId
+   * @throws PartnerUnknownKeyException
+   */
+  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException, ProductUnknownKeyException{
+    _warehouse.toggleNotifications(productId, partnerId);
+  }
+
+  
+  /** 
+   * @param partnerId
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
+  public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
+    return _warehouse.getPartnerBuyTransactions(partnerId);
+  }
+
+
+  /** 
+   * @param partnerId
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
+  public String getPartnerSellBreakdownTransactions(String partnerId) throws PartnerUnknownKeyException{
+    return _warehouse.getPartnerSellBreakdownTransactions(partnerId);
   }
 
   
@@ -191,15 +219,30 @@ public class WarehouseManager {
    * @param productId
    * @return Product
    */
-  //partnerId, productId, paymentDeadline, amount);
   public void registerSaleTransaction(String partnerId, String productId, int paymentDeadline, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     _warehouse.registerSaleTransaction(partnerId, productId, paymentDeadline, amount);
   }
-  //TODO javadocs
+  
+  
+  
+  /** 
+   * @param partnerId
+   * @param productId
+   * @param quantity
+   * @throws PartnerUnknownKeyException
+   * @throws ProductUnknownKeyException
+   * @throws ProductUnavailableException
+   */
   public void registerBreakdownTransaction(String partnerId, String productId, int quantity) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     _warehouse.registerBreakdownTransaction(partnerId, productId, quantity);
   }
 
+
+  
+  /** 
+   * @param productId
+   * @return Product
+   */
   public Product getProduct(String productId){
     return _warehouse.getProduct(productId);
   }
@@ -226,43 +269,33 @@ public class WarehouseManager {
     _warehouse.registerProduct(productId, totalStock, maxPrice, alpha, recipe);
   }
 
-  
-  /** 
-   * @param productId
-   * @param partnerId
-   * @throws PartnerUnknownKeyException
-   */
-  public void toggleNotifications(String productId, String partnerId) throws PartnerUnknownKeyException, ProductUnknownKeyException{
-    _warehouse.toggleNotifications(productId, partnerId);
-  }
 
   
   /** 
-   * @param partnerId
+   * @param price
    * @return String
-   * @throws PartnerUnknownKeyException
    */
-  public String getPartnerBuyTransactions(String partnerId) throws PartnerUnknownKeyException{
-    return _warehouse.getPartnerBuyTransactions(partnerId);
-  }
-
-    /** 
-   * @param partnerId
-   * @return String
-   * @throws PartnerUnknownKeyException
-   */
-  public String getPartnerSellBreakdownTransactions(String partnerId) throws PartnerUnknownKeyException{
-    return _warehouse.getPartnerSellBreakdownTransactions(partnerId);
-  }
-
   public String getBatchesByPrice(double price){
     return _warehouse.getBatchesByPrice(price);
   }
 
+
+  
+  /** 
+   * @param id
+   * @throws TransactionUnknownKeyException
+   */
   public void payTransaction(int id) throws TransactionUnknownKeyException{
     _warehouse.payTransaction(id);
   }
 
+
+  
+  /** 
+   * @param partnerId
+   * @return String
+   * @throws PartnerUnknownKeyException
+   */
   public String getPartnerPaidTransactions(String partnerId) throws PartnerUnknownKeyException{
     return _warehouse.getPartnerPaidTransactions(partnerId);
   }

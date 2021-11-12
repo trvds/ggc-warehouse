@@ -28,47 +28,93 @@ public abstract class Transaction implements Serializable {
         return _id;
     }
     
+
+    
+    /** 
+     * @return String
+     */
     public String getPartnerId(){
         return _partnerId;
     }
 
+
+    
+    /** 
+     * @return String
+     */
     public String getProductId(){
         return _productId;
     }
 
+
+    
+    /** 
+     * @return int
+     */
     public int getDate(){
         return _date;
     }
 
 
+    
+    /** 
+     * @return double
+     */
     public double getBasePrice(){
         return _price;
     }
 
+
+    
     /** 
-     * @return int - date of the payment
+     * @return int
      */
     public int getPaymentDate(){
         return _date;
     }
 
+
+    
+    /** 
+     * @param date
+     */
     public void setPaymentDate(int date){
         _date = date;
     }
 
+
     
     /** 
-     * @return String - type of the transaction ("COMPRA", "VENDA", "DESAGREGAÇÃO")
+     * @param isPaid(
+     * @return String
      */
     public abstract String transactionType();
 
     
+    
+    /** 
+     * @return boolean
+     */
     public boolean isPaid(){
         return true;
     }
 
-    public void setPaid() { };
-    public int getDeadline() {return _date;};
+    
+    /** 
+     * @param getDeadline(
+     */
+    public void setPaid() { }
+
+
+    
+    /** 
+     * @return int
+     */
+    public int getDeadline() {
+        return _date;
+    }
+    
+
     
     /** 
      * @return String

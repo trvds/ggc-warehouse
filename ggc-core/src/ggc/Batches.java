@@ -44,7 +44,14 @@ public class Batches implements Serializable, Comparable<Batches>{
         return _quantity;
     }
 
-    
+    /**
+     * @return double
+     */
+    public double getPrice() {
+        return _price;
+    }
+
+
     /** 
      * @return double
      */
@@ -55,10 +62,6 @@ public class Batches implements Serializable, Comparable<Batches>{
         else {
             //Undefined behaviour
         }
-    }
-
-    public double getPrice() {
-        return _price;
     }
 
 
@@ -95,8 +98,6 @@ public class Batches implements Serializable, Comparable<Batches>{
         return myCollator.compare(_product.getProductId(), comparedProduct);
     }
     
-    /*TODO https://web.tecnico.ulisboa.pt/~david.matos/w/pt/index.php/Classes_Internas_(Java)/Exerc%C3%ADcio_01:_Interfaces_java.lang.Comparable_e_java.util.Comparator
-    */
     private static class PriceComparator implements Comparator<Batches> {
         public int compare(Batches batch1, Batches batch2) {
             int delta = (int) Math.round(batch1.getPrice() - batch2.getPrice());

@@ -21,20 +21,33 @@ public class SellTransaction extends Transaction{
         return "VENDA";
     }
 
+
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isPaid(){
         return _paid;
     }
 
-    @Override
-    public int getDeadline(){
-        return _paymentDeadline;
-    }
 
     @Override
     public void setPaid(){
         _paid = true;
     }
+
+
+    
+    /** 
+     * @return int
+     */
+    @Override
+    public int getDeadline(){
+        return _paymentDeadline;
+    }
+
+
     /** 
      * @return String
      */

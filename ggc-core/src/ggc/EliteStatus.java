@@ -8,6 +8,7 @@ public class EliteStatus extends Status{
         super(partner, points);
     }
 
+
     public void updateStatus(){
         if(getPoints() <= 25000){
             demoteStatus();
@@ -15,10 +16,8 @@ public class EliteStatus extends Status{
     }
 
     
-    /** 
-     * @param demoteStatus(
-     */
     public void promoteStatus(){ }
+
 
     public void demoteStatus(){
         getPartner().setStatus(new NormalStatus(getPartner(), getPoints()));
@@ -33,7 +32,7 @@ public class EliteStatus extends Status{
         return "ELITE";
     }
 
-    @Override
+
     /**
      * Calculates the price of the product for payment and how many points to deduct from the partner for missing payment deadline
      * @param date - current date
@@ -41,6 +40,7 @@ public class EliteStatus extends Status{
      * @param deadline - payment deadline
      * @param price - base price
      */
+    @Override
     public double calculatePrice(int date, int n, int deadline, double price){
         int p1 = deadline - n;
         int p4 = deadline + n;

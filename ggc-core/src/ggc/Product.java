@@ -24,21 +24,63 @@ public class Product implements ObservableProduct {
         _maxPrice = maxPrice;
     }
 
-    protected void setN(int n){
-        _n = n;
+
+    public String getProductId(){
+        return _id;
     }
+
+
+    public int getTotalStock() {
+        return _totalStock;
+    }
+
+
+    public void setTotalStock(int totalStock){
+        _totalStock = totalStock;
+    }
+
+
+    public double getMaxPrice() {
+        return _maxPrice;
+    }
+
+
+    public void setMaxPrice(double maxPrice){
+        _maxPrice = maxPrice;
+    }
+
+
+    public String getAllComponents() {
+        return "";
+    }
+
 
     public int getN(){
         return _n;
     }
+
+
+    protected void setN(int n){
+        _n = n;
+    }
     
+
+    public ArrayList<RecipeComponent> getRecipe() {
+        ArrayList<RecipeComponent> emptyRecipe = new ArrayList<RecipeComponent>();
+        return emptyRecipe;
+    }
+
+
     public void canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
+        
         if (totalStock < amount)
-          throw new ProductUnavailableException(getProductId(), amount, totalStock);
+            throw new ProductUnavailableException(getProductId(), amount, totalStock);
+        
         productsStock.remove(getProductId());
         productsStock.put(getProductId(), totalStock - amount);
     }
+
 
     public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
         TreeSet<Batches> productBatches = batches.get(this.getProductId());
@@ -49,80 +91,35 @@ public class Product implements ObservableProduct {
 
         for (Batches b: orderedByPrice) {
             int takeAmount = amount - fulfilledAmount;
+            
             if (b.getQuantity() > takeAmount) { //More than we need to complete
-                
-              //  productBatches.remove(b); // Remove original batch
                 totalPrice += b.getPrice() * takeAmount;
                 fulfilledAmount = amount; // <=> fulfilledAmount += takeAmount ; we're done here
-
                 b.withdraw(takeAmount);
                 setTotalStock(getTotalStock() - takeAmount);
-              //  productBatches.add(b); //Insert our modified batch, replacing OG
                 break;
-            }
-            else if (b.getQuantity() == takeAmount) { //Just what we need - consume, destroy and leave
+
+            } else if (b.getQuantity() == takeAmount) { //Just what we need - consume, destroy and leave
                 fulfilledAmount = amount;
                 totalPrice += b.getPrice() * b.getQuantity();
                 productBatches.remove(b);
                 setTotalStock(getTotalStock() - b.getQuantity());
                 break;
-            }
-            else { //Not enough quantity in this batch - consume all, destroy and continue
+            
+            }else { //Not enough quantity in this batch - consume all, destroy and continue
                 fulfilledAmount += b.getQuantity();
                 totalPrice += b.getPrice() * b.getQuantity();
                 productBatches.remove(b);
                 setTotalStock(getTotalStock() - b.getQuantity());
             }
         }
+
         if (fulfilledAmount != amount) { //What we had was not enough for a simple product, throw Exception
             throw new ProductUnavailableException(getProductId(), amount, fulfilledAmount);
         }
         return totalPrice;
     }
 
-    
-    /** 
-     * @return String
-     */
-    public String getProductId(){
-        return _id;
-    }
-
-
-    /** 
-     * @return int
-     */
-    public int getTotalStock() {
-        return _totalStock;
-    }
-
-
-    /** 
-     * @param totalStock
-     */
-    public void setTotalStock(int totalStock){
-        _totalStock = totalStock;
-    }
-
-    /** 
-     * @return double
-     */
-    public double getMaxPrice() {
-        return _maxPrice;
-    }
-
-    /** 
-     * @param maxPrice
-     */
-    public void setMaxPrice(double maxPrice){
-        _maxPrice = maxPrice;
-    }
-
-
-
-    public String getAllComponents() {
-        return "";
-    }
     
     /** 
      * @param observer
@@ -165,10 +162,6 @@ public class Product implements ObservableProduct {
         }
     }
 
-    public ArrayList<RecipeComponent> getRecipe() {
-        ArrayList<RecipeComponent> emptyRecipe = new ArrayList<RecipeComponent>();
-        return emptyRecipe;
-    }
 
     /** 
      * @return String
@@ -177,6 +170,4 @@ public class Product implements ObservableProduct {
     public String toString(){
         return _id + "|" + Math.round(_maxPrice) + "|" + _totalStock;
     }
-
-
 }

@@ -8,6 +8,7 @@ public class SelectionStatus extends Status{
         super(partner, points);
     }
 
+
     public void updateStatus(){
         if (getPoints() > 25000){
             promoteStatus();
@@ -17,14 +18,15 @@ public class SelectionStatus extends Status{
         }
     }
 
+
     public void promoteStatus(){
         getPartner().setStatus(new EliteStatus(getPartner(), getPoints()));
     }
 
+
     public void demoteStatus(){
         getPartner().setStatus(new NormalStatus(getPartner(), getPoints()));
     }
-      
     
     
     /** 
@@ -35,7 +37,7 @@ public class SelectionStatus extends Status{
         return "SELECTION";
     }
 
-    @Override
+
     /**
      * Calculates the price of the product for payment and how many points to deduct from the partner for missing payment deadline
      * @param date - current date
@@ -43,6 +45,7 @@ public class SelectionStatus extends Status{
      * @param deadline - payment deadline
      * @param price - base price
      */
+    @Override
     public double calculatePrice(int date, int n, int deadline, double price){
         int p1 = deadline - n;
         int p4 = deadline + n;

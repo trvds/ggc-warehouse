@@ -34,6 +34,7 @@ public abstract class Status implements Serializable{
         _points = points;
     }
 
+    
     public abstract void promoteStatus();
     public abstract void demoteStatus();
     public abstract void updateStatus();
