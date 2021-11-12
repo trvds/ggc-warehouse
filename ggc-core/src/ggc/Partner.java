@@ -14,7 +14,7 @@ public class Partner implements ProductObserver {
     private double _totalSold;
     private double _totalPaid;
     private ArrayList<Notification> _notifications = new ArrayList<Notification>();
-    private DeliveryMode _deliveryMode = new DefaultDeliveryMode();
+    private StandardDeliveryMode _deliveryMode = new StandardDeliveryMode();
     private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
 
