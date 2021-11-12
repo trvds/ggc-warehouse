@@ -41,7 +41,7 @@ public class DerivedProduct extends Product {
 
 
     @Override
-    public void canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) throws ProductUnavailableException{
+    public void canDispatchProduct(int amount, Map<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
 
         if (totalStock >= amount){

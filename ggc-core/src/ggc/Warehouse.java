@@ -2,12 +2,13 @@ package ggc;
 import ggc.exceptions.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.TreeSet;
+import java.util.Collections;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -406,7 +407,7 @@ public class Warehouse implements Serializable {
   public double doSaleTransaction(String partnerId, String productId, int amount) throws PartnerUnknownKeyException, ProductUnknownKeyException, ProductUnavailableException {
     Partner partner = _partners.get(partnerId);
     Product product = _products.get(productId);
-    TreeMap<String, Integer> productsStock = new TreeMap<String, Integer>();
+    HashMap<String, Integer> productsStock = new HashMap<String, Integer>();
 
     if (partner == null) {
       throw new PartnerUnknownKeyException(partnerId);

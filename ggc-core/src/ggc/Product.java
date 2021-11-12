@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.HashMap;
 
 import ggc.Batches;
 import ggc.exceptions.ProductUnavailableException;
@@ -71,7 +72,7 @@ public class Product implements ObservableProduct {
     }
 
 
-    public void canDispatchProduct(int amount, TreeMap<String, Integer> productsStock) throws ProductUnavailableException{
+    public void canDispatchProduct(int amount, Map<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
         
         if (totalStock < amount)
