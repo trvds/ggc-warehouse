@@ -1,4 +1,5 @@
 package ggc;
+
 import java.lang.Math;
 
 public class BreakdownTransaction extends Transaction {
