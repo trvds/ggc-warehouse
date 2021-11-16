@@ -18,6 +18,10 @@ public class DerivedProduct extends Product {
     }
     
 
+    
+    /** 
+     * @return ArrayList<RecipeComponent>
+     */
     @Override
     public ArrayList<RecipeComponent> getRecipe() {
         return _recipe;
@@ -40,6 +44,12 @@ public class DerivedProduct extends Product {
     }
 
 
+    
+    /** 
+     * @param amount
+     * @param productsStock
+     * @throws ProductUnavailableException
+     */
     @Override
     public void canDispatchProduct(int amount, Map<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
@@ -60,6 +70,12 @@ public class DerivedProduct extends Product {
     }
 
     
+    
+    /** 
+     * @param batches
+     * @return double
+     * @throws ProductUnavailableException
+     */
     @Override
     public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
         TreeSet<Batches> productBatches = batches.get(this.getProductId());

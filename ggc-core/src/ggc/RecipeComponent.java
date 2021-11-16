@@ -12,11 +12,19 @@ public class RecipeComponent implements Serializable{
     }
 
 
+    
+    /** 
+     * @return Product
+     */
     public Product getProduct() {
         return _product;
     }
 
 
+    
+    /** 
+     * @return int
+     */
     public int getProductQuantity() {
         return _productQuantity;
     }

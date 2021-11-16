@@ -16,6 +16,10 @@ public class EliteStatus extends Status{
     }
 
     
+    
+    /** 
+     * @param demoteStatus(
+     */
     public void promoteStatus(){ }
 
 

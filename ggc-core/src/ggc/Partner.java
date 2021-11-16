@@ -36,6 +36,10 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @return int
+     */
     public int getPoints(){
         return _status.getPoints();
     }
@@ -58,16 +62,28 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @param bought
+     */
     public void updateBought(double bought){
         _totalBought += bought;
     }
 
 
+    
+    /** 
+     * @param sold
+     */
     public void updateSold(double sold){
         _totalSold += sold;
     }
 
 
+    
+    /** 
+     * @param paid
+     */
     public void updatePaid(double paid){
         _totalPaid += paid;
     }
@@ -99,6 +115,10 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @param points
+     */
     public void updateStatus(int points){
         _status.setPoints(points);
         _status.updateStatus();
@@ -141,6 +161,10 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @return ArrayList<Transaction>
+     */
     public ArrayList<Transaction> getPaidTransactions(){
         ArrayList<Transaction> returnList = new ArrayList<Transaction>();
         
@@ -154,6 +178,10 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @return ArrayList<Transaction>
+     */
     public ArrayList<Transaction> getSellBreakdownTransactions(){
         ArrayList<Transaction> returnList = new ArrayList<Transaction>();
         
@@ -167,6 +195,14 @@ public class Partner implements ProductObserver {
     }
 
 
+    
+    /** 
+     * @param date
+     * @param n
+     * @param deadline
+     * @param price
+     * @return double
+     */
     public double calculatePrice(int date, int n, int deadline, double price){
         return _status.calculatePrice(date, n, deadline, price);
     }

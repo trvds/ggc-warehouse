@@ -84,6 +84,16 @@ public abstract class Transaction implements Serializable {
 
 
     
+    
+    
+    /** 
+     * @param isPaid(
+     * @return String
+     */
+    /** 
+     * @param isPaid(
+     * @return String
+     */
     /** 
      * @param isPaid(
      * @return String

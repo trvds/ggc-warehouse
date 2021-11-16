@@ -21,6 +21,10 @@ public class NormalStatus extends Status{
     }
 
     
+    
+    /** 
+     * @param getStatus(
+     */
     public void demoteStatus(){ }
     
     

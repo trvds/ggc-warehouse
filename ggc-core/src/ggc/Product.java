@@ -26,52 +26,94 @@ public class Product implements ObservableProduct {
     }
 
 
+    
+    /** 
+     * @return String
+     */
     public String getProductId(){
         return _id;
     }
 
 
+    
+    /** 
+     * @return int
+     */
     public int getTotalStock() {
         return _totalStock;
     }
 
 
+    
+    /** 
+     * @param totalStock
+     */
     public void setTotalStock(int totalStock){
         _totalStock = totalStock;
     }
 
 
+    
+    /** 
+     * @return double
+     */
     public double getMaxPrice() {
         return _maxPrice;
     }
 
 
+    
+    /** 
+     * @param maxPrice
+     */
     public void setMaxPrice(double maxPrice){
         _maxPrice = maxPrice;
     }
 
 
+    
+    /** 
+     * @return String
+     */
     public String getAllComponents() {
         return "";
     }
 
 
+    
+    /** 
+     * @return int
+     */
     public int getN(){
         return _n;
     }
 
 
+    
+    /** 
+     * @param n
+     */
     protected void setN(int n){
         _n = n;
     }
     
 
+    
+    /** 
+     * @return ArrayList<RecipeComponent>
+     */
     public ArrayList<RecipeComponent> getRecipe() {
         ArrayList<RecipeComponent> emptyRecipe = new ArrayList<RecipeComponent>();
         return emptyRecipe;
     }
 
 
+    
+    /** 
+     * @param amount
+     * @param productsStock
+     * @throws ProductUnavailableException
+     */
     public void canDispatchProduct(int amount, Map<String, Integer> productsStock) throws ProductUnavailableException{
         int totalStock = productsStock.get(getProductId());
         
@@ -83,6 +125,12 @@ public class Product implements ObservableProduct {
     }
 
 
+    
+    /** 
+     * @param batches
+     * @return double
+     * @throws ProductUnavailableException
+     */
     public double doDispatchProduct(int amount, double totalPrice, Map<String, TreeSet<Batches>> batches) throws ProductUnavailableException {
         TreeSet<Batches> productBatches = batches.get(this.getProductId());
         Set<Batches> orderedByPrice = new TreeSet<Batches>(Batches.PRICE_COMPARATOR);
