@@ -1,2 +1,4 @@
-# proj-po
-Projeto de Programação com Objetos (UML + Java)
+# ggc-warehouse
+🇵🇹 - Projeto de Programação com Objetos, 2021/22.
+
+🇬🇧 - Object Oriented Programming project, 2021/22.
